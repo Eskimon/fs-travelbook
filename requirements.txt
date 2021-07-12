@@ -1,4 +1,5 @@
 black==21.6b0
 Django==3.2.5
 flake8==3.9.2
+Jinja2==3.0.1
 pre-commit==2.13.0
