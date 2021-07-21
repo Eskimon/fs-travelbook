@@ -1,0 +1,16 @@
+<!-- Messages from backend -->
+{% if messages %}
+<div class="messages-wrapper">
+  {% for message in messages %}
+  <div class="notification is-light
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}is-info{% endif %}
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}is-success{% endif %}
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}is-warning{% endif %}
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}is-danger{% endif %}
+  ">
+    <button class="delete"></button>
+    {{ message }}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
