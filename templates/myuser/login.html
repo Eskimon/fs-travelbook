@@ -18,7 +18,7 @@
           <div class="field">
             <label class="label" for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
             <div class="control has-icons-left">
-              <input required class="input" type="text" name="{{ form.username.html_name  }}" id="{{ form.username.id_for_label }}" placeholder="Username" value="{{ form.username.value|default_if_none:"" }}" pattern="[\w.@+-]+">
+              <input class="input" type="text" name="{{ form.username.html_name  }}" id="{{ form.username.id_for_label }}" placeholder="Username" value="{{ form.username.value|default_if_none:"" }}" pattern="[\w.@+-]+">
               <span class="icon is-small is-left">
                 <i class="mdi mdi-account"></i>
               </span>
@@ -54,4 +54,5 @@
     </footer>
   </div>
 </div>
+
 {% endblock %}

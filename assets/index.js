@@ -1,6 +1,8 @@
 require('./mystyles.scss');
 require('./login_signup.scss');
 require('./messages.scss');
+require('./flights.scss');
+require('./picture.scss');
 
 
 document.addEventListener('DOMContentLoaded', () => {
