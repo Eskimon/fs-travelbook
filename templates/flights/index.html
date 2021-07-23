@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% for flight in object_list %}
+  <a href="{% url 'flights:detail' flight.pk %}" title="{{ flight.description }}">
+    <div class="flight">
+      <h2 class="name">{{ flight.name }}</h2>
+      <div class="meta">{{ flight.departure.ICAO }} -> {{ flight.arrival.ICAO }}</div>
+    </div>
+  </a>
+{% endfor %}
+
+<a href="{% url 'flights:create' %}" title="Add a new flight">
+  <div class="flight">
+    + New flight
+  </div>
+</a>
+{% endblock %}

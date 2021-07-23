@@ -22,9 +22,10 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-  <link rel="stylesheet" href="{% static 'css/mystyles.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style-global.css' %}">
 
   <link rel="stylesheet" href="//cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
+  {% block head_css %}{% endblock %}
   {% block head_js %}{% endblock %}
 </head>
 
@@ -50,7 +51,7 @@
           Map
         </a>
 
-        <a class="navbar-item is-tab">
+        <a class="navbar-item is-tab" href="{% url 'flights:list' %}">
           Flights
         </a>
 
@@ -88,7 +89,7 @@
 
   {% block content %}{% endblock %}
 
-  <script src="{% static 'js/bundle.js' %}"></script>
+  <script src="{% static 'js/bundle-global.js' %}"></script>
 
   {% block footer_js %}{% endblock %}
 </body>

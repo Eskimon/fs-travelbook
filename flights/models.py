@@ -56,7 +56,7 @@ class Flight(models.Model):
                         "alt": data["Flight"]["DepartureAirport"]["Elevation"],
                     },
                 )[0]
-                self.departure = Airport.objects.get_or_create(
+                self.arrival = Airport.objects.get_or_create(
                     pk=data["Flight"]["ArrivalActualAirportId"],
                     defaults={
                         "id": data["Flight"]["ArrivalActualAirport"]["Id"],
@@ -92,7 +92,7 @@ class Waypoint(models.Model):
     index = models.PositiveIntegerField()
     lat = models.DecimalField(max_digits=9, decimal_places=6)
     lon = models.DecimalField(max_digits=9, decimal_places=6)
-    alt = models.DecimalField(max_digits=6, decimal_places=2)
+    alt = models.DecimalField(max_digits=7, decimal_places=2)
     # Storing speed and whatnot?
     # speed = Positive Integer
     # compas = Positive Integer
