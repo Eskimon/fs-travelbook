@@ -9,17 +9,19 @@
 {% block content %}
 
 <div class="detail-flight">
-{% comment %} {{ object.name }}
-<br>
-{{ object.description }}
-<br> {% endcomment %}
-
-{% comment %} {% for wp in object.waypoints.all %}
-  {{ wp.lat }} - {{ wp.lon }} - {{ wp.alt }}
-  <br>
-{% endfor %} {% endcomment %}
   <div id="map"></div>
+  <div class="infos">
+    <h1 class="title is-5">{{ object.name }}</h1>
+    <h2 class="subtitle is-6"><em>{{ object.description }}</em></h2>
+    <p><strong>From:</strong> {{ object.departure.display_name }}</p>
+    <p><strong>To:</strong> {{ object.arrival.display_name }}</p>
+    <p><strong>Started at:</strong> {{ object.start }}</p>
+    <p><strong>Airborn at:</strong> {{ object.takeoff }}</p>
+    <p><strong>Landing at:</strong> {{ object.landing }}</p>
+  </div>
 </div>
+
+{% comment %} TODO: on click on departure/arrival <p> tag, center map on airport {% endcomment %}
 
 {% endblock %}
 

@@ -1,0 +1,15 @@
+.flights-list {
+  padding: 20px;
+  display: flex;
+
+  .flight-box {
+    width: 200px;
+    height: 200px;
+    display: block;
+    border: 1px solid gray;
+    border-radius: 10px;
+    margin: 10px;
+    text-align: center;
+    color: black;
+  }
+}
