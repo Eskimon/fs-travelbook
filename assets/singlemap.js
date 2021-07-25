@@ -1,4 +1,5 @@
 require("./flight.scss")
+import { drawFlight } from "./drawFlight.js"
 
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
@@ -18,3 +19,5 @@ L.Icon.Default.mergeOptions({
     shadowUrl: markerShadow,
 })
 //----------------------------------------------------------------------------
+
+window.drawFlight = drawFlight

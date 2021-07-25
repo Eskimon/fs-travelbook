@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 from django.views import generic
 
 from .models import Flight
@@ -17,6 +18,12 @@ class IndexView(LoginRequiredMixin, generic.ListView):
 class DetailView(LoginRequiredMixin, generic.DetailView):
     model = Flight
     template_name = "flights/detail.html"
+
+
+class DeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Flight
+    template_name = "flights/detail.html"
+    success_url = reverse_lazy("flights:list")
 
 
 class CreateView(LoginRequiredMixin, generic.CreateView):

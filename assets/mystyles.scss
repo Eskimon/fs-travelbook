@@ -9,3 +9,8 @@
 @import "../node_modules/bulma/sass/elements/title.sass";
 @import "../node_modules/bulma/sass/form/_all.sass";
 @import "../node_modules/bulma/sass/components/navbar.sass";
+
+
+.modal.is-active {
+  z-index: 1000 !important;
+}

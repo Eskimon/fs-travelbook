@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method="POST" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
 
     <!-- Security token -->
     {% csrf_token %}

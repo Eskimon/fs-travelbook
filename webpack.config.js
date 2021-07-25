@@ -5,7 +5,7 @@ module.exports = {
   // entry: './assets/index.js',  // path to our input file
   entry: {
     global: ["./assets/index.js"],
-    singlemap: ["./assets/singlemap.js"],
+    singlemap: ["./assets/singlemap.js", "./assets/drawFlight.js"],
   },
   output: {
     filename: "js/bundle-[name].js",  // output bundle file name
