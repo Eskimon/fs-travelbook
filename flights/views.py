@@ -20,6 +20,12 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
     template_name = "flights/detail.html"
 
 
+class UpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Flight
+    fields = ["name", "description"]
+    template_name = "flights/update.html"
+
+
 class DeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Flight
     template_name = "flights/detail.html"

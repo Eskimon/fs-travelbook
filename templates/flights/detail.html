@@ -13,12 +13,14 @@
   <div class="infos">
     <h1 class="title is-5">{{ object.name }}</h1>
     <h2 class="subtitle is-6"><em>{{ object.description }}</em></h2>
-    <p class="airport from"><strong>From:</strong> {{ object.departure.display_name }}</p>
-    <p class="airport to"><strong>To:</strong> {{ object.arrival.display_name }}</p>
+    <p class="airport from is-clickable"><strong>From:</strong> {{ object.departure.display_name }}</p>
+    <p class="airport to is-clickable"><strong>To:</strong> {{ object.arrival.display_name }}</p>
     <p><strong>Started at:</strong> {{ object.start }}</p>
     <p><strong>Airborn at:</strong> {{ object.takeoff }}</p>
     <p><strong>Landing at:</strong> {{ object.landing }}</p>
-    <p class="has-text-right deleter">
+
+    <p class="is-flex is-justify-content-space-between mt-5">
+      <a class="button is-info" title="Edit this flight" href="{% url 'flights:update' object.pk %}"><i class="mdi mdi-square-edit-outline"></i></a>
       <button class="button is-danger" id="open-delete-modal"><i class="mdi mdi-delete"></i></button>
     </p>
   </div>
