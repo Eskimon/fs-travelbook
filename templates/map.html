@@ -13,9 +13,9 @@
   <div class="infos">
     <ul class="flight-list">
       {% for flight in flights.all %}
-        <li class="is-clickable" data-idx="{{ forloop.counter0 }}">
+        <li class="is-clickable" data-idx="{{ forloop.counter0 }}" title="{{ flight.description }} ({{ flight.departure.display_name }} - {{ flight.arrival.display_name }})">
           <span class="color-box" style="background-color: hsl({% widthratio forloop.counter0 1 color_step %}, 100%, 50%)"></span>
-          <span class="flight-name" title="{{ flight.departure.display_name }} - {{ flight.arrival.display_name }}">{{ flight.name }}</span>
+          <span class="flight-name">{{ flight.name }}</span>
         </li>
       {% endfor %}
     </ul>
@@ -48,8 +48,24 @@ polys.push(drawFlight(
 
 
 document.querySelectorAll("ul.flight-list li .flight-name").forEach( el => {
-  el.addEventListener("click", () => {
-    map.fitBounds(polys[event.target.parentNode.dataset.idx].getBounds())
+  el.addEventListener("click", (event) => {
+    map.fitBounds(polys[event.target.parentNode.dataset.idx].polyline.getBounds())
+  })
+})
+
+document.querySelectorAll("ul.flight-list li .color-box").forEach( el => {
+  el.addEventListener("click", (event) => {
+    if(event.target.classList.contains("hide")) {
+      event.target.classList.remove("hide")
+      polys[event.target.parentNode.dataset.idx].polyline.addTo(map)
+      polys[event.target.parentNode.dataset.idx].dep_mark.addTo(map)
+      polys[event.target.parentNode.dataset.idx].arr_mark.addTo(map)
+    } else {
+      event.target.classList.add("hide")
+      polys[event.target.parentNode.dataset.idx].polyline.removeFrom(map)
+      polys[event.target.parentNode.dataset.idx].dep_mark.removeFrom(map)
+      polys[event.target.parentNode.dataset.idx].arr_mark.removeFrom(map)
+    }
   })
 })
 
