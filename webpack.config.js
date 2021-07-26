@@ -4,8 +4,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 module.exports = {
   // entry: './assets/index.js',  // path to our input file
   entry: {
-    global: ["./assets/index.js"],
-    singlemap: ["./assets/singlemap.js", "./assets/drawFlight.js"],
+    global: ["./assets/js/index.js"],
+    singlemap: ["./assets/js/singlemap.js", "./assets/js/drawFlight.js"],
   },
   output: {
     filename: "js/bundle-[name].js",  // output bundle file name

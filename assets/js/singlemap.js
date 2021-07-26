@@ -1,4 +1,4 @@
-require("./flight.scss")
+require("../scss/flight.scss")
 import { drawFlight } from "./drawFlight.js"
 
 import L from "leaflet"
