@@ -68,7 +68,7 @@ document.querySelector('button#open-delete-modal').addEventListener('click', fun
 });
 
 
-var map = L.map('map').setView([51.505, -0.09], 13);
+var map = L.map('map').setView([47.4771198,-0.5972396], 6);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -85,7 +85,9 @@ let pts = [
 {% endfor %}
 ]
 
-drawFlight(dep, arr, pts, map)
+let polyline = drawFlight(dep, arr, pts, map)
+
+map.fitBounds([dep, arr])
 
 
 document.querySelector('.airport.from').addEventListener('click', function(event) {

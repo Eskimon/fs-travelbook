@@ -1,7 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render
+
+from flights.models import Flight
 
 from .forms import NewUserForm
 
@@ -42,11 +45,13 @@ def login_view(request):
     return render(request, "myuser/login.html", {"form": form})
 
 
+@login_required
 def logout_view(request):
     logout(request)
     return redirect("home")
 
 
-def testing(request):
-    messages.error(request, "Blabla some tests.")
-    return render(request, "base.html")
+@login_required
+def mapview(request):
+    flights = Flight.objects.filter(owner=request.user)
+    return render(request, "map.html", {"flights": flights, "color_step": max(20, 360 / len(flights))})

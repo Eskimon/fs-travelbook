@@ -13,3 +13,12 @@
     color: black;
   }
 }
+
+ul.flight-list {
+  .color-box {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border: solid 1px black;
+  }
+}

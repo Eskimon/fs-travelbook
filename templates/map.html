@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head_css %}
+<link rel="stylesheet" href="{% static 'css/style-singlemap.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="detail-flight">
+  <div id="map"></div>
+
+  <div class="infos">
+    <ul class="flight-list">
+      {% for flight in flights.all %}
+        <li class="is-clickable" data-idx="{{ forloop.counter0 }}">
+          <span class="color-box" style="background-color: hsl({% widthratio forloop.counter0 1 color_step %}, 100%, 50%)"></span>
+          <span class="flight-name" title="{{ flight.departure.display_name }} - {{ flight.arrival.display_name }}">{{ flight.name }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block footer_js %}
+<script src="{% static 'js/bundle-singlemap.js' %}"></script>
+
+<script>
+var map = L.map('map').setView([47.4771198,-0.5972396], 6);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+let polys = []
+
+{% for flight in flights.all %}
+polys.push(drawFlight(
+  [{{ flight.departure.lat }}, {{ flight.departure.lon }}],
+  [{{ flight.arrival.lat }}, {{ flight.arrival.lon }}],
+  [{% for wp in flight.waypoints.all %}[{{ wp.lat }}, {{ wp.lon }}],{% endfor %}],
+  map,
+  "hsl({% widthratio forloop.counter0 1 color_step %}, 100%, 50%)"
+))
+{% endfor %}
+
+
+document.querySelectorAll("ul.flight-list li .flight-name").forEach( el => {
+  el.addEventListener("click", () => {
+    map.fitBounds(polys[event.target.parentNode.dataset.idx].getBounds())
+  })
+})
+
+</script>
+{% endblock %}

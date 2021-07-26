@@ -1,5 +1,6 @@
-export function drawFlight(departure, arrival, points, map) {
+export function drawFlight(departure, arrival, points, map, color) {
   //let poly = [[departure[0], departure[1]]];
+  let _color = color || "#3388ff"
   let poly = []
   let lastLon = points[0][1]
   let wrap = false
@@ -20,7 +21,7 @@ export function drawFlight(departure, arrival, points, map) {
     // lastpoint.lng += (lastpoint.lng < 0) ? 360 : -360
   // }
   // poly.push(lastpoint)
-  L.polyline(poly).addTo(map)
+  let polyline = L.polyline(poly, {color: _color}).addTo(map)
 
   let startLoc = L.latLng(departure[0], departure[1])
   let stopLoc = L.latLng(arrival[0], arrival[1])
@@ -30,5 +31,5 @@ export function drawFlight(departure, arrival, points, map) {
   L.marker(startLoc).addTo(map)
   L.marker(stopLoc).addTo(map)
 
-  map.fitBounds([startLoc,stopLoc])
+  return polyline
 }

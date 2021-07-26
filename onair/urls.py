@@ -18,11 +18,15 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.generic.base import TemplateView
 
+from myuser.views import mapview
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", TemplateView.as_view(template_name="home.html"), name="home"),
     path("user/", include("myuser.urls")),
     path("flights/", include("flights.urls")),
     # path("picture/", include("picture.urls")),
-    path("", TemplateView.as_view(template_name="home.html"), name="home"),
+    path("map/", mapview, name="map"),
+    # Debug toolbar
     path("__debug__/", include(debug_toolbar.urls)),
 ]

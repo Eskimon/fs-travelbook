@@ -2,11 +2,6 @@
   height: calc(100vh - 3.25rem - 4px);
   position: relative;
 
-  #map {
-    height: 100%;
-    width: 100%;
-  }
-
   .infos {
     position: absolute;
     width: 22%;
@@ -18,4 +13,9 @@
     z-index: 1000;
     padding: 10px;
   }
+}
+
+#map {
+  height: 100%;
+  width: 100%;
 }
