@@ -33,7 +33,7 @@ class Flight(models.Model):
             # Parse the data file
             with self.data_file.open() as f:
                 data = json.load(f)
-                self.pk = data["Flight"]["Id"]
+                # self.pk = data["Flight"]["Id"]
                 # Some general data about the flight
                 self.start = data["Flight"]["StartTime"]
                 self.takeoff = data["Flight"]["AirborneTime"]
