@@ -18,6 +18,17 @@
     </ul>
   </div>
 </div>
+{% comment %} <div class="carousel">
+  <div class="left"></div>
+  <div class="carousel-inside">
+    {% for picture in pictures.all %}
+    <div class="pic-holder" data-idx="{{ forloop.counter0 }}">
+      <img src="{{ picture.data_file.url }}" title="{{ picture.name }}" />
+    </div>
+    {% endfor %}
+  </div>
+  <div class="right"></div>
+</div> {% endcomment %}
 {% endblock %}
 
 
@@ -29,8 +40,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+// Draw all the flights
 let polys = []
-
 {% for flight in flights.all %}
 polys.push(drawFlight(
   [{{ flight.departure.lat }}, {{ flight.departure.lon }}],
@@ -41,7 +52,7 @@ polys.push(drawFlight(
 ))
 {% endfor %}
 
-
+// Event Listeners
 document.querySelectorAll("ul.flight-list li .flight-name").forEach( el => {
   el.addEventListener("click", (event) => {
     map.fitBounds(polys[event.target.parentNode.dataset.idx].polyline.getBounds())
@@ -63,6 +74,36 @@ document.querySelectorAll("ul.flight-list li .color-box").forEach( el => {
     }
   })
 })
+
+// Configuration Popup
+var customOptions = {"minWidth": "800", 'maxWidth': '1000', 'className' : 'lb-source'}
+
+let icon = undefined;
+let content = '';
+{% for picture in pictures.all %}
+// Configuration icone marqueur Rennes 2
+icon = L.icon({
+  iconUrl: '{{ picture.data_file.url }}',
+  iconSize: [50, 50] })
+// Configuration image popup Rennes 2
+content = "<b>{{ picture.name }}<br/<br/><img src='{{ picture.data_file.url }}' width='800px'/>";
+// Ajout marqueur Rennes 2
+L.marker([{{ picture.lat }}, {{ picture.lon }}],{icon: icon}).bindPopup(content, customOptions).addTo(map)
+{% endfor %}
+/*
+// Draw all the pictures location
+let pictures = []
+{% for picture in pictures.all %}
+pictures.push(L.circleMarker([{{ picture.lat }}, {{ picture.lon }}], {}).addTo(map))
+{% endfor %}
+
+document.querySelectorAll(".pic-holder").forEach( el => {
+  el.addEventListener("click", (event) => {
+    console.log(event)
+    map.panTo(pictures[el.dataset.idx].getLatLng())
+  })
+})
+*/
 
 </script>
 {% endblock %}

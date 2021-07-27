@@ -5,6 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render
 
 from flights.models import Flight
+from pictures.models import Picture
 
 from .forms import NewUserForm
 
@@ -54,4 +55,7 @@ def logout_view(request):
 @login_required
 def mapview(request):
     flights = Flight.objects.filter(owner=request.user)
-    return render(request, "map.html", {"flights": flights, "color_step": max(20, 360 / len(flights))})
+    pictures = Picture.objects.filter(owner=request.user)
+    return render(
+        request, "map.html", {"flights": flights, "color_step": max(20, 360 / len(flights)), "pictures": pictures}
+    )

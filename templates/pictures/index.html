@@ -1,18 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="pictures-list">
+<div class="pictures-list columns py-5 is-multiline">
   {% for picture in object_list %}
-    <a class="picture-box" href="{% url 'pictures:detail' picture.pk %}" title="{{ picture.description }}">
-      <div>
-        <h2 class="title name">{{ picture.name }}</h2>
-        <h3 class="subtitle description">{{ picture.description }}</h3>
+  <a class="card mx-2 column is-one-quarter is-one-fifth-fullhd" href="{% url 'pictures:detail' picture.pk %}">
+    <div class="card-image">
+      <figure class="image">
+        <img src="{{ picture.data_file.url }}">
+      </figure>
+    </div>
+    <div class="card-content">
+      <div class="content">
+        <p class="title is-4">{{ picture.name }}</p>
+        <p class="subtitle is-6">{{ picture.description }}</p>
       </div>
-    </a>
+    </div>
+  </a>
   {% endfor %}
 
-  <a href="{% url 'pictures:create' %}" title="Add a new picture">
-    <div class="picture-box">
+  <a class="card mx-2 column is-one-quarter is-one-fifth-fullhd adder" href="{% url 'pictures:create' %}" title="Add a new picture">
+    <div class="card-content is-flex">
       + Add a picture
     </div>
   </a>
