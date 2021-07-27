@@ -14,3 +14,20 @@
 .modal.is-active {
   z-index: 1000 !important;
 }
+
+
+.picture-box {
+  position: relative;
+  .card {
+    width: 400px;
+    position: absolute;
+    top: calc(20px);
+    left: auto;
+    right: 20px;
+    z-index: 1000;
+  }
+  #map {
+    height: calc(100vh - 3.25rem - 4px);
+    width: 100%;
+  }
+}

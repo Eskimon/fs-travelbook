@@ -2,7 +2,6 @@ require("../scss/mystyles.scss")
 require("../scss/login_signup.scss")
 require("../scss/messages.scss")
 require("../scss/flights.scss")
-require("../scss/picture.scss")
 
 
 document.addEventListener("DOMContentLoaded", () => {
