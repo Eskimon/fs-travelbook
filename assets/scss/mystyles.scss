@@ -15,54 +15,21 @@
   z-index: 1000 !important;
 }
 
-/* Map page */
-.carousel {
-  width: 100vw;
-  position: absolute;
-  top: auto;
-  bottom: 10px;
-  left: 0;
-  height: 150px;
-  background-color: white;
-  z-index: 1000;
-  overflow: hidden;
+.messages-wrapper {
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
 
-  .left, .right {
-    width: 50px;
-    height: 150px;
-    position: absolute;
-    background-color: rgba(255, 255, 255, 0.8);
-    z-index: 1100;
-    top: 0;
-  }
-  .left {
-    left: 0;
-  }
-  .right {
-    left: auto;
-    right: 0;
-  }
+.login-box {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  .carousel-inside {
-    position: relative;
-    transition: left 100ms;
-    display: inline-flex;
-  }
-
-  .pic-holder {
-    height: 150px;
-    width: 200px;
-    margin: 0 5px;
-    display: inline-flex;
-    cursor: pointer;
-
-    img {
-      object-fit: contain;
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-    }
+  .card {
+    width: 500px;
   }
 }
 
