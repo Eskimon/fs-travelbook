@@ -2,10 +2,6 @@
 
 {% load static %}
 
-{% block head_css %}
-<link rel="stylesheet" href="{% static 'css/style-singlemap.css' %}">
-{% endblock %}
-
 {% block content %}
 
 <div class="detail-flight">
@@ -50,8 +46,6 @@
 {% endblock %}
 
 {% block footer_js %}
-<script src="{% static 'js/bundle-singlemap.js' %}"></script>
-
 <script>
 
 document.querySelector('button#open-delete-modal').addEventListener('click', function(event) {

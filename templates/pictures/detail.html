@@ -2,27 +2,32 @@
 
 {% load static %}
 
-{% block head_css %}
-<link rel="stylesheet" href="{% static 'css/style-singlemap.css' %}">
-{% endblock %}
 
 {% block content %}
-
-<div class="detail-flight">
+<div class="picture-box">
   <div id="map"></div>
-  <div class="infos">
-    <h1 class="title is-5 is-clickable">{{ object.name }}</h1>
-    <h2 class="subtitle is-6"><em>{{ object.description }}</em></h2>
+  <div class="card">
+    <header class="card-header has-background-light">
+      <p class="card-header-title is-clickable">{{ object.name }}</p>
+    </header>
+    <div class="card-content">
+      <div class="content">
+        <p class="subtitle is-6"><em>{{ object.description }}</em></p>
 
-    <p><strong>Latitude:</strong> {{ object.lat }}</p>
-    <p><strong>Longitude:</strong> {{ object.lon }}</p>
+        <p class="mb-0"><strong>Coordinates:</strong> {{ object.lat }} - {{ object.lon }}</p>
+        {% if object.flight %}
+        <p class="mb-0"><em>Attached to flight <strong><a href="{% url 'flights:detail' object.flight.pk %}" title="{{ object.flight.description }}">{{ object.flight.name }}</a></strong></em></p>
+        {% endif %}
 
-    <p class="is-flex is-justify-content-space-between mt-5">
-      <a class="button is-info" title="Edit this picture" href="{% url 'pictures:update' object.pk %}"><i class="mdi mdi-square-edit-outline"></i></a>
-      <button class="button is-danger" id="open-delete-modal"><i class="mdi mdi-delete"></i></button>
-    </p>
+        <img class="mt-2 lb-source" src="{{ object.data_file.url }}" data-name="{{ object.name }}" data-description="{{ object.description }}">
 
-    <img src="{{ object.data_file.url }}">
+        <p class="is-flex is-justify-content-space-between mt-5">
+          <a class="button is-info" title="Edit this picture" href="{% url 'pictures:update' object.pk %}"><i class="mdi mdi-square-edit-outline"></i></a>
+          <button class="button is-danger" id="open-delete-modal"><i class="mdi mdi-delete"></i></button>
+        </p>
+
+      </div>
+    </div>
   </div>
 </div>
 
@@ -44,15 +49,12 @@
   </div>
 </div>
 
-{% comment %} TODO: on click on departure/arrival <p> tag, center map on airport {% endcomment %}
+{% include 'lightbox.part.html' %}
 
 {% endblock %}
 
 {% block footer_js %}
-<script src="{% static 'js/bundle-singlemap.js' %}"></script>
-
 <script>
-
 document.querySelector('button#open-delete-modal').addEventListener('click', function(event) {
   event.preventDefault();
   var modal = document.querySelector('.modal');  // assuming you have only 1
@@ -86,7 +88,7 @@ let pts = [
 ]
 
 let polyline = drawFlight(dep, arr, pts, map)
-map.fitBounds([dep, arr])
+{% comment %} map.fitBounds(polyline.polyline.getBounds()) {% endcomment %}
 {% endif %}
 
 let coords = [{{ object.lat }}, {{ object.lon }}]
@@ -95,7 +97,7 @@ L.marker(coords).addTo(map)
 map.panTo(coords)
 
 
-document.querySelector('.infos .title').addEventListener('click', function(event) {
+document.querySelector('header').addEventListener('click', function(event) {
   map.panTo(coords, {animate: true});
 });
 

@@ -35,7 +35,7 @@ class UpdateView(LoginRequiredMixin, generic.UpdateView):
 class DeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Picture
     template_name = "pictures/detail.html"
-    success_url = reverse_lazy("flights:list")
+    success_url = reverse_lazy("pictures:list")
 
 
 class CreateView(LoginRequiredMixin, generic.CreateView):

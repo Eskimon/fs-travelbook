@@ -2,9 +2,6 @@
 
 {% load static %}
 
-{% block head_css %}
-<link rel="stylesheet" href="{% static 'css/style-singlemap.css' %}">
-{% endblock %}
 
 {% block content %}
 <div class="detail-flight">
@@ -25,8 +22,6 @@
 
 
 {% block footer_js %}
-<script src="{% static 'js/bundle-singlemap.js' %}"></script>
-
 <script>
 var map = L.map('map').setView([47.4771198,-0.5972396], 6);
 

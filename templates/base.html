@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="{% static 'css/style-global.css' %}">
 
   <link rel="stylesheet" href="//cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
+  <script src="{% static 'js/bundle-global.js' %}"></script>
   {% block head_css %}{% endblock %}
   {% block head_js %}{% endblock %}
 </head>
@@ -89,8 +90,6 @@
   {% include 'messages.part.html' %}
 
   {% block content %}{% endblock %}
-
-  <script src="{% static 'js/bundle-global.js' %}"></script>
 
   {% block footer_js %}{% endblock %}
 </body>
