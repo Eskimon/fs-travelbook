@@ -18,17 +18,6 @@
     </ul>
   </div>
 </div>
-{% comment %} <div class="carousel">
-  <div class="left"></div>
-  <div class="carousel-inside">
-    {% for picture in pictures.all %}
-    <div class="pic-holder" data-idx="{{ forloop.counter0 }}">
-      <img src="{{ picture.data_file.url }}" title="{{ picture.name }}" />
-    </div>
-    {% endfor %}
-  </div>
-  <div class="right"></div>
-</div> {% endcomment %}
 {% endblock %}
 
 
@@ -81,29 +70,15 @@ var customOptions = {"minWidth": "800", 'maxWidth': '1000', 'className' : 'lb-so
 let icon = undefined;
 let content = '';
 {% for picture in pictures.all %}
-// Configuration icone marqueur Rennes 2
+// Configuration icone marqueur
 icon = L.icon({
   iconUrl: '{{ picture.data_file.url }}',
   iconSize: [50, 50] })
-// Configuration image popup Rennes 2
-content = "<b>{{ picture.name }}<br/<br/><img src='{{ picture.data_file.url }}' width='800px'/>";
-// Ajout marqueur Rennes 2
+// Configuration image popup
+content = "<h1 class='title has-text-centered'>{{ picture.name }}</h1><img class='lb-source' src='{{ picture.data_file.url }}' width='800px'/>";
+// Ajout marqueur
 L.marker([{{ picture.lat }}, {{ picture.lon }}],{icon: icon}).bindPopup(content, customOptions).addTo(map)
 {% endfor %}
-/*
-// Draw all the pictures location
-let pictures = []
-{% for picture in pictures.all %}
-pictures.push(L.circleMarker([{{ picture.lat }}, {{ picture.lon }}], {}).addTo(map))
-{% endfor %}
-
-document.querySelectorAll(".pic-holder").forEach( el => {
-  el.addEventListener("click", (event) => {
-    console.log(event)
-    map.panTo(pictures[el.dataset.idx].getLatLng())
-  })
-})
-*/
 
 </script>
 {% endblock %}

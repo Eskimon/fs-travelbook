@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="pictures-list columns py-5 is-multiline">
+<div class="pictures-list columns py-5 is-multiline has-text-centered is-justify-content-center">
   {% for picture in object_list %}
-  <a class="card mx-2 column is-one-quarter is-one-fifth-fullhd" href="{% url 'pictures:detail' picture.pk %}">
+  <a class="card m-2 column is-one-quarter is-one-fifth-fullhd" href="{% url 'pictures:detail' picture.pk %}">
     <div class="card-image">
       <figure class="image">
         <img src="{{ picture.data_file.url }}">
@@ -18,7 +18,7 @@
   </a>
   {% endfor %}
 
-  <a class="card mx-2 column is-one-quarter is-one-fifth-fullhd adder" href="{% url 'pictures:create' %}" title="Add a new picture">
+  <a class="card m-2 column is-one-quarter is-one-fifth-fullhd adder" href="{% url 'pictures:create' %}" title="Add a new picture">
     <div class="card-content is-flex">
       + Add a picture
     </div>
