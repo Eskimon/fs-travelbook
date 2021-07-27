@@ -35,7 +35,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.info(request, f"You are now logged in as {username}.")
-                return redirect("home")
+                return redirect("map")
             else:
                 messages.error(request, "Invalid username or password.")
         else:
@@ -57,5 +57,7 @@ def mapview(request):
     flights = Flight.objects.filter(owner=request.user)
     pictures = Picture.objects.filter(owner=request.user)
     return render(
-        request, "map.html", {"flights": flights, "color_step": max(20, 360 / len(flights)), "pictures": pictures}
+        request,
+        "map.html",
+        {"flights": flights, "color_step": max(20, 360 / max(1, len(flights))), "pictures": pictures},
     )

@@ -20,6 +20,16 @@
   margin-top: 10px;
   display: flex;
   justify-content: center;
+  position: absolute;
+  top: calc(3.25rem + 4px);
+  z-index: 1200;
+  flex-direction: column;
+
+  .notification {
+    width: auto;
+    margin: auto;
+    margin-top: 10px;
+  }
 }
 
 .login-box {
