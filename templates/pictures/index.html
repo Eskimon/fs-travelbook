@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="pictures-list">
+  {% for picture in object_list %}
+    <a class="picture-box" href="{% url 'pictures:detail' picture.pk %}" title="{{ picture.description }}">
+      <div>
+        <h2 class="title name">{{ picture.name }}</h2>
+        <h3 class="subtitle description">{{ picture.description }}</h3>
+      </div>
+    </a>
+  {% endfor %}
+
+  <a href="{% url 'pictures:create' %}" title="Add a new picture">
+    <div class="picture-box">
+      + Add a picture
+    </div>
+  </a>
+</div>
+{% endblock %}

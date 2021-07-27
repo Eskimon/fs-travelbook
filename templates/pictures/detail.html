@@ -11,19 +11,18 @@
 <div class="detail-flight">
   <div id="map"></div>
   <div class="infos">
-    <h1 class="title is-5">{{ object.name }}</h1>
+    <h1 class="title is-5 is-clickable">{{ object.name }}</h1>
     <h2 class="subtitle is-6"><em>{{ object.description }}</em></h2>
-    <p class="airport from is-clickable"><strong>From:</strong> {{ object.departure.display_name }}</p>
-    <p class="airport to is-clickable"><strong>To:</strong> {{ object.arrival.display_name }}</p>
-    <p><strong>Started at:</strong> {{ object.start }}</p>
-    <p><strong>Airborn at:</strong> {{ object.takeoff }}</p>
-    <p><strong>Landing at:</strong> {{ object.landing }}</p>
+
+    <p><strong>Latitude:</strong> {{ object.lat }}</p>
+    <p><strong>Longitude:</strong> {{ object.lon }}</p>
 
     <p class="is-flex is-justify-content-space-between mt-5">
-      <a class="button is-link" title="Add a picture to this flight" href="{% url 'pictures:create' %}?flight={{ flight.id }}"><i class="mdi mdi-image-plus"></i></a>
-      <a class="button is-info" title="Edit this flight" href="{% url 'flights:update' object.pk %}"><i class="mdi mdi-square-edit-outline"></i></a>
+      <a class="button is-info" title="Edit this picture" href="{% url 'pictures:update' object.pk %}"><i class="mdi mdi-square-edit-outline"></i></a>
       <button class="button is-danger" id="open-delete-modal"><i class="mdi mdi-delete"></i></button>
     </p>
+
+    <img src="{{ object.data_file.url }}">
   </div>
 </div>
 
@@ -34,10 +33,10 @@
       <p class="modal-card-title">Are you sure?</p>
     </header>
     <section class="modal-card-body">
-      Are you sure you want to delete this flight?
+      Are you sure you want to delete this picture?
     </section>
     <footer class="modal-card-foot is-flex is-justify-content-flex-end">
-      <form method="post" action="{% url 'flights:delete' object.pk %}">
+      <form method="post" action="{% url 'pictures:delete' object.pk %}">
         {% csrf_token %}
         <input type="submit" value="Yes, delete that!" class="button is-danger" >
       </form>
@@ -77,25 +76,27 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 
 
-
-let dep = [{{ object.departure.lat }}, {{ object.departure.lon }}]
-let arr = [{{ object.arrival.lat }}, {{ object.arrival.lon }}]
+{% if object.flight %}
+let dep = [{{ object.flight.departure.lat }}, {{ object.flight.departure.lon }}]
+let arr = [{{ object.flight.arrival.lat }}, {{ object.flight.arrival.lon }}]
 let pts = [
-{% for wp in object.waypoints.all %}
+{% for wp in object.flight.waypoints.all %}
   [{{ wp.lat }}, {{ wp.lon }}],
 {% endfor %}
 ]
 
 let polyline = drawFlight(dep, arr, pts, map)
-
 map.fitBounds([dep, arr])
+{% endif %}
+
+let coords = [{{ object.lat }}, {{ object.lon }}]
+L.marker(coords).addTo(map)
+
+map.panTo(coords)
 
 
-document.querySelector('.airport.from').addEventListener('click', function(event) {
-  map.panTo(dep, {animate: true});
-});
-document.querySelector('.airport.to').addEventListener('click', function(event) {
-  map.panTo(arr, {animate: true});
+document.querySelector('.infos .title').addEventListener('click', function(event) {
+  map.panTo(coords, {animate: true});
 });
 
 </script>

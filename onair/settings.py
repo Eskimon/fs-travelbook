@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "myuser",
     "flights",
+    "pictures",
 ]
 
 MIDDLEWARE = [

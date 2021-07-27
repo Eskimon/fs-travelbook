@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="login-box">
+  <div class="card">
+    <header class="card-header has-background-light">
+      <p class="card-header-title">{% if not object %}Add{% else %}Edit{% endif %} a picture</p>
+    </header>
+    <div class="card-content">
+      <div class="content">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+          <p class="help is-danger">{{ form.non_field_errors }}</p>
+          {% endif %}
+
+          <div class="field">
+            <label class="label" for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+            <div class="control">
+              <input class="input" type="text" name="{{ form.name.html_name  }}" id="{{ form.name.id_for_label }}" placeholder="Name of this picture" value="{{ form.name.value|default_if_none:"" }}">
+            </div>
+            {% for error in form.name.errors %}
+            <p class="help is-danger">{{ error }}</p>
+            {% endfor %}
+          </div>
+
+          <div class="field">
+            <label class="label" for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+            <div class="control">
+              <textarea class="textarea" name="{{ form.description.html_name  }}" id="{{ form.description.id_for_label }}" placeholder="Description">{{ form.description.value|default_if_none:"" }}</textarea>
+            </div>
+            {% for error in form.description.errors %}
+            <p class="help is-danger">{{ error }}</p>
+            {% endfor %}
+          </div>
+
+          {% if not object %}
+          <div class="field">
+            <div class="file has-name">
+              <label class="file-label">
+                <input class="file-input" type="file" name="{{ form.data_file.html_name  }}" id="{{ form.data_file.id_for_label }}" accept="image/*">
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <i class="mdi mdi-upload"></i>
+                  </span>
+                  <span class="file-label">
+                    Choose a file…
+                  </span>
+                </span>
+                <span class="file-name">
+                </span>
+              </label>
+            </div>
+          </div>
+          {% endif %}
+
+          <div class="field">
+            <label class="label" for="{{ form.flight.id_for_label }}">{{ form.flight.label }}</label>
+            <div class="control">
+              <div class="select">
+                <select name="{{ form.flight.html_name  }}" id="{{ form.flight.id_for_label }}">
+                <option value="" {% if not form.flight.value %}selected{% endif %}>None</option>
+                {% for flight in flights %}
+                  <option value="{{ flight.id }}" {% if flight.id == form.flight.value %}selected{% endif %}>{{ flight.name }}</option>
+                {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="help">Attach this picture to a flight</div>
+            {% for error in form.flight.errors %}
+            <p class="help is-danger">{{ error }}</p>
+            {% endfor %}
+          </div>
+
+          <div class="field-body">
+            <div class="field">
+              <label class="label" for="{{ form.lat.id_for_label }}">{{ form.lat.label }}</label>
+              <div class="control">
+                <input class="input" type="number" step="0.001" name="{{ form.lat.html_name  }}" id="{{ form.lat.id_for_label }}" placeholder="Latitude" value="{{ form.lat.value|default_if_none:"0.0000" }}">
+              </div>
+              {% for error in form.lat.errors %}
+              <p class="help is-danger">{{ error }}</p>
+              {% endfor %}
+            </div>
+
+            <div class="field">
+              <label class="label" for="{{ form.lon.id_for_label }}">{{ form.lon.label }}</label>
+              <div class="control">
+                <input class="input" type="number" step="0.001" name="{{ form.lon.html_name  }}" id="{{ form.lon.id_for_label }}" placeholder="Longitude" value="{{ form.lon.value|default_if_none:"0.0000" }}">
+              </div>
+              {% for error in form.lon.errors %}
+              <p class="help is-danger">{{ error }}</p>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="control has-text-right">
+          {% if not object %}
+            <button class="button is-link" type="submit">
+              <span class="icon mr-1">
+                <i class="mdi mdi-plus"></i>
+              </span>
+              Add
+            </button>
+          {% else %}
+            <button class="button is-link" type="submit">
+              Update
+            </button>
+          {% endif %}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer_js %}
+<script>
+const fileInput = document.querySelector('input[type=file]')
+fileInput.onchange = () => {
+  if (fileInput.files.length > 0) {
+    const fileName = document.querySelector('.file-name')
+    fileName.textContent = fileInput.files[0].name
+  }
+}
+
+document.querySelector('button[type=submit]').addEventListener('click', function(event) {
+  event.target.classList.add("is-loading")
+});
+</script>
+{% endblock %}
