@@ -1,5 +1,6 @@
 {% load static %}
 {% load active_tag %}
+{% load render_bundle from webpack_loader %}
 
 <!doctype html>
 
@@ -23,10 +24,14 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
-  <link rel="stylesheet" href="{% static 'css/style-global.css' %}">
-
   <link rel="stylesheet" href="//cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
-  <script src="{% static 'js/bundle-global.js' %}"></script>
+
+  {% comment %} <link rel="stylesheet" href="{% static 'css/style-global.css' %}">
+  <script src="{% static 'js/bundle-global.js' %}"></script> {% endcomment %}
+
+  {% render_bundle 'global' 'css' %}
+  {% render_bundle 'global' 'js' %}
+
   {% block head_css %}{% endblock %}
   {% block head_js %}{% endblock %}
 </head>

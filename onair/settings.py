@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ["192.168.0.15"]
 # Application definition
 
 INSTALLED_APPS = [
+    "webpack_loader",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -131,3 +132,11 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+WEBPACK_LOADER = {
+    "DEFAULT": {
+        "BUNDLE_DIR_NAME": "",
+        "STATS_FILE": os.path.join(BASE_DIR, "webpack-stats.json"),
+    }
+}

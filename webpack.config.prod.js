@@ -12,7 +12,7 @@ module.exports = {
     global: ["./assets/js/index.js", "./assets/js/drawFlight.js", "./assets/js/drawPicture.js"],
   },
   output: {
-    filename: "js/bundle-[name].js",  // output bundle file name
+    filename: "js/bundle-[name]_[hash:7].js",  // output bundle file name
     path: path.resolve(__dirname, "./static"),  // path to our Django static directory
   },
   module: {
@@ -43,23 +43,23 @@ module.exports = {
       use: [{
         loader: "file-loader",
         options: {
-          name: "img/[name].[ext]",
+          name: "img/[name]_[hash:7].[ext]",
         },
       }],
     }],
   },
   plugins: [
-    // new CleanWebpackPlugin(),
+    new CleanWebpackPlugin(),
     // new CopyWebpackPlugin({ patterns: [{ from: path.resolve(__dirname, '../public'), to: 'public' }] }),
     // new HtmlWebpackPlugin({
     //   template: path.resolve(__dirname, '../src/index.html'),
     // }),
     new BundleTracker({filename: "./webpack-stats.json"}),
     new Webpack.DefinePlugin({
-      "process.env.NODE_ENV": JSON.stringify("development"),
+      "process.env.NODE_ENV": JSON.stringify("production"),
     }),
     new MiniCssExtractPlugin({
-      filename: "css/style-[name].css",
+      filename: "css/style-[name]_[hash:7].css",
     }),
   ],
 }
