@@ -66,7 +66,7 @@ document.querySelectorAll("ul.flight-list li .color-box").forEach( el => {
 
 // Draw pictures
 {% for picture in pictures.all %}
-drawPicture([{{ picture.lat }}, {{ picture.lon }}], "{{ picture.name }}", "{{ picture.data_file.url }}", map)
+drawPicture([{{ picture.lat }}, {{ picture.lon }}], "{{ picture.name }}", "{{ picture.description }}", "{{ picture.data_file.url }}", map)
 {% endfor %}
 
 </script>

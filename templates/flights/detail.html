@@ -93,7 +93,7 @@ document.querySelector('.airport.to').addEventListener('click', function(event) 
 });
 
 {% for picture in flight.pictures.all %}
-drawPicture([{{ picture.lat }}, {{ picture.lon }}], "{{ picture.name }}", "{{ picture.data_file.url }}", map)
+drawPicture([{{ picture.lat }}, {{ picture.lon }}], "{{ picture.name }}", "{{ picture.description }}", "{{ picture.data_file.url }}", map)
 {% endfor %}
 
 </script>
