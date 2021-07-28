@@ -4,7 +4,7 @@
 <div class="login-box">
   <div class="card">
     <header class="card-header has-background-light">
-      <p class="card-header-title">Add a flight</p>
+      <p class="card-header-title">{% if not object %}Add{% else %}Edit{% endif %} a flight</p>
     </header>
     <div class="card-content">
       <div class="content">
@@ -35,6 +35,7 @@
             {% endfor %}
           </div>
 
+          {% if not object %}
           <div class="file has-name">
             <label class="file-label">
               <input class="file-input" type="file" name="{{ form.data_file.html_name  }}" id="{{ form.data_file.id_for_label }}">
@@ -50,14 +51,21 @@
               </span>
             </label>
           </div>
+          {% endif %}
 
           <div class="control has-text-right">
+          {% if not object %}
             <button class="button is-link" type="submit">
               <span class="icon mr-1">
                 <i class="mdi mdi-plus"></i>
               </span>
               Add
             </button>
+          {% else %}
+            <button class="button is-link" type="submit">
+              Update
+            </button>
+          {% endif %}
           </div>
         </form>
       </div>

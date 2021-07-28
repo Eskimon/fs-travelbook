@@ -64,20 +64,9 @@ document.querySelectorAll("ul.flight-list li .color-box").forEach( el => {
   })
 })
 
-// Configuration Popup
-var customOptions = {"minWidth": "800", 'maxWidth': '1000', 'className' : 'lb-source'}
-
-let icon = undefined;
-let content = '';
+// Draw pictures
 {% for picture in pictures.all %}
-// Configuration icone marqueur
-icon = L.icon({
-  iconUrl: '{{ picture.data_file.url }}',
-  iconSize: [50, 50] })
-// Configuration image popup
-content = "<h1 class='title has-text-centered'>{{ picture.name }}</h1><img class='lb-source' src='{{ picture.data_file.url }}' width='800px'/>";
-// Ajout marqueur
-L.marker([{{ picture.lat }}, {{ picture.lon }}],{icon: icon}).bindPopup(content, customOptions).addTo(map)
+drawPicture([{{ picture.lat }}, {{ picture.lon }}], "{{ picture.name }}", "{{ picture.data_file.url }}", map)
 {% endfor %}
 
 </script>

@@ -23,7 +23,7 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
 class UpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Flight
     fields = ["name", "description"]
-    template_name = "flights/update.html"
+    template_name = "flights/create_update.html"
 
 
 class DeleteView(LoginRequiredMixin, generic.DeleteView):
@@ -35,7 +35,7 @@ class DeleteView(LoginRequiredMixin, generic.DeleteView):
 class CreateView(LoginRequiredMixin, generic.CreateView):
     model = Flight
     fields = ["name", "description", "data_file"]
-    template_name = "flights/create.html"
+    template_name = "flights/create_update.html"
 
     @transaction.atomic
     def form_valid(self, form):

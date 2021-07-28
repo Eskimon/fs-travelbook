@@ -2,6 +2,7 @@ require("../scss/mystyles.scss")
 require("../scss/flights.scss")
 
 import { drawFlight } from "./drawFlight.js"
+import { drawPicture } from "./drawPicture.js"
 
 
 import L from "leaflet"
@@ -22,6 +23,7 @@ L.Icon.Default.mergeOptions({
 })
 //----------------------------------------------------------------------------
 window.drawFlight = drawFlight
+window.drawPicture = drawPicture
 
 
 document.addEventListener("DOMContentLoaded", () => {

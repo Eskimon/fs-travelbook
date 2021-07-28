@@ -92,5 +92,9 @@ document.querySelector('.airport.to').addEventListener('click', function(event) 
   map.panTo(arr, {animate: true});
 });
 
+{% for picture in flight.pictures.all %}
+drawPicture([{{ picture.lat }}, {{ picture.lon }}], "{{ picture.name }}", "{{ picture.data_file.url }}", map)
+{% endfor %}
+
 </script>
 {% endblock %}

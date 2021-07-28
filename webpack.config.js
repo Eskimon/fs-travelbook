@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 module.exports = {
   // entry: './assets/index.js',  // path to our input file
   entry: {
-    global: ["./assets/js/index.js", "./assets/js/drawFlight.js"],
+    global: ["./assets/js/index.js", "./assets/js/drawFlight.js", "./assets/js/drawPicture.js"],
     // singlemap: ["./assets/js/singlemap.js", "./assets/js/drawFlight.js"],
   },
   output: {
