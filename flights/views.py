@@ -44,5 +44,5 @@ class CreateView(LoginRequiredMixin, generic.CreateView):
         # return response
         obj = form.save(commit=False)
         obj.owner = self.request.user
-        obj.save(reparse=True)
+        obj = obj.save(reparse=True)
         return HttpResponseRedirect(obj.get_absolute_url())

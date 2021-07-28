@@ -8,7 +8,8 @@ from django.utils import timezone
 
 
 class Flight(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    embed_id = models.CharField(max_length=36)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="flights")
     name = models.CharField(max_length=100, null=False, blank=False)
     data_file = models.FileField(upload_to="uploads/flights/")
@@ -22,6 +23,7 @@ class Flight(models.Model):
 
     class Meta:
         ordering = ["name"]
+        constraints = [models.UniqueConstraint(fields=["owner", "embed_id"], name="unique flight_owner")]
 
     def get_absolute_url(self):
         return reverse("flights:detail", args=[self.id])
@@ -33,16 +35,19 @@ class Flight(models.Model):
             # Parse the data file
             with self.data_file.open() as f:
                 data = json.load(f)
-                # self.pk = data["Flight"]["Id"]
+                exist = Flight.objects.get(embed_id=data["Flight"]["Id"])
+                if exist:
+                    return exist
+                self.embed_id = data["Flight"]["Id"]
                 # Some general data about the flight
                 self.start = data["Flight"]["StartTime"]
                 self.takeoff = data["Flight"]["AirborneTime"]
                 self.landing = data["Flight"]["LandedTime"]
                 # Try to get/create the depart/arrival airport
                 self.departure = Airport.objects.get_or_create(
-                    pk=data["Flight"]["DepartureAirportId"],
+                    onair_id=data["Flight"]["DepartureAirportId"],
                     defaults={
-                        "id": data["Flight"]["DepartureAirport"]["Id"],
+                        "onair_id": data["Flight"]["DepartureAirport"]["Id"],
                         "ICAO": data["Flight"]["DepartureAirport"]["ICAO"],
                         "IATA": data["Flight"]["DepartureAirport"]["IATA"],
                         "name": data["Flight"]["DepartureAirport"]["Name"],
@@ -57,9 +62,9 @@ class Flight(models.Model):
                     },
                 )[0]
                 self.arrival = Airport.objects.get_or_create(
-                    pk=data["Flight"]["ArrivalActualAirportId"],
+                    onair_id=data["Flight"]["ArrivalActualAirportId"],
                     defaults={
-                        "id": data["Flight"]["ArrivalActualAirport"]["Id"],
+                        "onair_id": data["Flight"]["ArrivalActualAirport"]["Id"],
                         "ICAO": data["Flight"]["ArrivalActualAirport"]["ICAO"],
                         "IATA": data["Flight"]["ArrivalActualAirport"]["IATA"],
                         "name": data["Flight"]["ArrivalActualAirport"]["Name"],
@@ -106,6 +111,7 @@ class Waypoint(models.Model):
 
 class Airport(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    onair_id = models.CharField(max_length=36, unique=True, null=True, blank=True)
     ICAO = models.CharField(max_length=4)  # Validator only capital letter
     IATA = models.CharField(max_length=3)  # Validator only capital letter
     name = models.CharField(max_length=100)
