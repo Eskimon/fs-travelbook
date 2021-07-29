@@ -51,13 +51,11 @@ class CreateView(LoginRequiredMixin, generic.CreateView):
     def get_initial(self):
         initial = super(CreateView, self).get_initial()
         initial = initial.copy()
-        print(initial, self.request.GET)
         flight_id = self.request.GET.get("flight", None)
         if flight_id:
             flight = Flight.objects.get(id=flight_id)
             if flight:
                 initial["flight"] = flight.id
-        print(initial)
         return initial
 
     @transaction.atomic

@@ -35,9 +35,9 @@ class Flight(models.Model):
             # Parse the data file
             with self.data_file.open() as f:
                 data = json.load(f)
-                exist = Flight.objects.get(embed_id=data["Flight"]["Id"])
-                if exist:
-                    return exist
+                test = Flight.objects.filter(embed_id=data["Flight"]["Id"])
+                if test.exists():
+                    return test.first()
                 self.embed_id = data["Flight"]["Id"]
                 # Some general data about the flight
                 self.start = data["Flight"]["StartTime"]
@@ -78,6 +78,7 @@ class Flight(models.Model):
                         "alt": data["Flight"]["ArrivalActualAirport"]["Elevation"],
                     },
                 )[0]
+                super(Flight, self).save(*args, **kwargs)
                 # Add all the waypoints
                 for idx, wp in enumerate(data["StatPoints"]):
                     Waypoint(
@@ -87,9 +88,11 @@ class Flight(models.Model):
                         lon=wp["Aircraft"]["Longitude"],
                         alt=wp["Aircraft"]["Altitude"],
                     ).save()
-                super(Flight, self).save(*args, **kwargs)
+                # super(Flight, self).save(*args, **kwargs)
+                return self
         else:
             super(Flight, self).save(*args, **kwargs)
+            return self
 
 
 class Waypoint(models.Model):
