@@ -18,12 +18,12 @@
     <p class="is-flex is-justify-content-space-between mt-5">
       <a class="button is-link" title="Add a picture to this flight" href="{% url 'pictures:create' %}?flight={{ flight.id }}"><i class="mdi mdi-image-plus"></i></a>
       <a class="button is-info" title="Edit this flight" href="{% url 'flights:update' object.pk %}"><i class="mdi mdi-square-edit-outline"></i></a>
-      <button class="button is-danger" id="open-delete-modal"><i class="mdi mdi-delete"></i></button>
+      <button class="button is-danger modal-opener" data-target="delete-flight-modal"><i class="mdi mdi-delete"></i></button>
     </p>
   </div>
 </div>
 
-<div class="modal">
+<div class="modal" id="delete-flight-modal">
   <div class="modal-background"></div>
   <div class="modal-card">
     <header class="modal-card-head">
@@ -42,27 +42,11 @@
 </div>
 
 {% comment %} TODO: on click on departure/arrival <p> tag, center map on airport {% endcomment %}
-
+{% include 'tipeee.part.html' %}
 {% endblock %}
 
 {% block footer_js %}
 <script>
-
-document.querySelector('button#open-delete-modal').addEventListener('click', function(event) {
-  event.preventDefault();
-  var modal = document.querySelector('.modal');  // assuming you have only 1
-  var html = document.querySelector('html');
-  modal.classList.add('is-active');
-  html.classList.add('is-clipped');
-
-  modal.querySelector('.modal-background').addEventListener('click', function(e) {
-    e.preventDefault();
-    modal.classList.remove('is-active');
-    html.classList.remove('is-clipped');
-  });
-});
-
-
 var map = L.map('map').setView([47.4771198,-0.5972396], 6);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

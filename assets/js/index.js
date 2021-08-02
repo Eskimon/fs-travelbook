@@ -1,6 +1,7 @@
 require("../scss/mystyles.scss")
 require("../scss/flights.scss")
 
+import pic_tipeee from "../img/tipeee.png"
 import { drawFlight } from "./drawFlight.js"
 import { drawPicture } from "./drawPicture.js"
 
@@ -26,6 +27,7 @@ window.drawFlight = drawFlight
 window.drawPicture = drawPicture
 
 
+// Burger menu
 document.addEventListener("DOMContentLoaded", () => {
   // Get all "navbar-burger" elements
   const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll(".navbar-burger"), 0)
@@ -77,6 +79,28 @@ document.addEventListener("DOMContentLoaded", () => {
       lbTitle.textContent = $elmt.dataset.name
       lbDescription.textContent = $elmt.dataset.description
       lbTarget.classList.add("show")
+    })
+  })
+})
+
+// Modals
+document.addEventListener("DOMContentLoaded", () => {
+
+  (document.querySelectorAll(".modal-opener") || []).forEach(($elmt) => {
+
+    $elmt.addEventListener("click", ($event) => {
+      let modal = document.getElementById($elmt.dataset.target)
+      let html = document.querySelector("html")
+      console.log(modal)
+      modal.classList.add("is-active")
+      html.classList.add("is-clipped")
+
+      modal.querySelector(".modal-background").addEventListener("click", function(e) {
+        e.preventDefault()
+        modal.classList.remove("is-active")
+        html.classList.remove("is-clipped")
+      })
+
     })
   })
 })

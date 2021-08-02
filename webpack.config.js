@@ -7,7 +7,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin")
 const BundleTracker = require("webpack-bundle-tracker")
 
 module.exports = {
-  mode: "production",
+  mode: "development",
   entry: {
     global: ["./assets/js/index.js", "./assets/js/drawFlight.js", "./assets/js/drawPicture.js"],
   },
