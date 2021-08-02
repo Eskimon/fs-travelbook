@@ -7,7 +7,7 @@
   <div class="infos">
     <ul class="flight-list">
       {% for flight in flights.all %}
-        <li class="is-clickable" data-idx="{{ forloop.counter0 }}" title="{{ flight.description }} ({{ flight.departure.display_name }} - {{ flight.arrival.display_name }})">
+        <li class="is-clickable" data-flightid="{{ flight.id }}" title="{{ flight.description }} ({{ flight.departure.display_name }} - {{ flight.arrival.display_name }})">
           <span class="color-box" style="background-color: hsl({% widthratio forloop.counter0 1 color_step %}, 100%, 50%)"></span>
           <span class="flight-name">{{ flight.name }}</span>
         </li>
@@ -29,21 +29,24 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // Draw all the flights
-let polys = []
+let polys = {}
+let pictures = {}
+
 {% for flight in flights.all %}
-polys.push(drawFlight(
+polys["{{ flight.id }}"] = drawFlight(
   [{{ flight.departure.lat }}, {{ flight.departure.lon }}],
   [{{ flight.arrival.lat }}, {{ flight.arrival.lon }}],
   [{% for wp in flight.waypoints.all %}[{{ wp.lat }}, {{ wp.lon }}],{% endfor %}],
   map,
   "hsl({% widthratio forloop.counter0 1 color_step %}, 100%, 50%)"
-))
+)
+pictures["{{ flight.id }}"] = []
 {% endfor %}
 
 // Event Listeners
 document.querySelectorAll("ul.flight-list li .flight-name").forEach( el => {
   el.addEventListener("click", (event) => {
-    map.fitBounds(polys[event.target.parentNode.dataset.idx].polyline.getBounds())
+    map.fitBounds(polys[event.target.parentNode.dataset.flightid].polyline.getBounds())
   })
 })
 
@@ -51,21 +54,35 @@ document.querySelectorAll("ul.flight-list li .color-box").forEach( el => {
   el.addEventListener("click", (event) => {
     if(event.target.classList.contains("hide")) {
       event.target.classList.remove("hide")
-      polys[event.target.parentNode.dataset.idx].polyline.addTo(map)
-      polys[event.target.parentNode.dataset.idx].dep_mark.addTo(map)
-      polys[event.target.parentNode.dataset.idx].arr_mark.addTo(map)
+      polys[event.target.parentNode.dataset.flightid].polyline.addTo(map)
+      polys[event.target.parentNode.dataset.flightid].dep_mark.addTo(map)
+      polys[event.target.parentNode.dataset.flightid].arr_mark.addTo(map)
+      if(pictures[event.target.parentNode.dataset.flightid].length) {
+        pictures[event.target.parentNode.dataset.flightid].forEach((item) => {
+          item.marker.addTo(map)
+        })
+      }
     } else {
       event.target.classList.add("hide")
-      polys[event.target.parentNode.dataset.idx].polyline.removeFrom(map)
-      polys[event.target.parentNode.dataset.idx].dep_mark.removeFrom(map)
-      polys[event.target.parentNode.dataset.idx].arr_mark.removeFrom(map)
+      polys[event.target.parentNode.dataset.flightid].polyline.removeFrom(map)
+      polys[event.target.parentNode.dataset.flightid].dep_mark.removeFrom(map)
+      polys[event.target.parentNode.dataset.flightid].arr_mark.removeFrom(map)
+      if(pictures[event.target.parentNode.dataset.flightid].length) {
+        pictures[event.target.parentNode.dataset.flightid].forEach((item) => {
+          item.marker.removeFrom(map)
+        })
+      }
     }
   })
 })
 
 // Draw pictures
+let picture = undefined
 {% for picture in pictures.all %}
-drawPicture([{{ picture.lat }}, {{ picture.lon }}], "{{ picture.name }}", "{{ picture.description }}", "{{ picture.data_file.url }}", map)
+picture = drawPicture([{{ picture.lat }}, {{ picture.lon }}], "{{ picture.name }}", "{{ picture.description }}", "{{ picture.data_file.url }}", map)
+{% if picture.flight %}
+pictures["{{ picture.flight.id }}"].push(picture)
+{% endif %}
 {% endfor %}
 
 </script>
