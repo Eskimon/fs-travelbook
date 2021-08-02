@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="flights-list">
+<div class="flights-list columns is-multiline has-text-centered is-justify-content-center">
   {% for flight in object_list %}
-    <a class="flight-box" href="{% url 'flights:detail' flight.pk %}" title="{{ flight.description }}">
+    <a class="flight-box is-one-quarter is-one-fifth-fullhd" href="{% url 'flights:detail' flight.pk %}" title="{{ flight.description }}">
       <div>
         <h2 class="title name">{{ flight.name }}</h2>
         <h3 class="subtitle description">{{ flight.description }}</h3>
