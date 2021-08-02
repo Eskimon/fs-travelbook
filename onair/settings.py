@@ -20,12 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-@6pm*1)g)tteas0b50m!2^g+-c2lb%wc97)7z&2@y-8+!^)h+u"
+SECRET_KEY = "change-me-please-I-am-an-insecure-key"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.0.15"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -145,10 +145,9 @@ WEBPACK_LOADER = {
 try:
     from .settings_dev import *  # noqa
 except ImportError:
-    print('No dev settings found, carrying on')
+    print("No dev settings found, carrying on")
 
 try:
     from .settings_prod import *  # noqa
 except ImportError:
-    print('No prod settings found, carrying on')
-
+    print("No prod settings found, carrying on")
