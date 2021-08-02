@@ -12,7 +12,7 @@ class Flight(models.Model):
     embed_id = models.CharField(max_length=36)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="flights")
     name = models.CharField(max_length=100, null=False, blank=False)
-    data_file = models.FileField(upload_to="uploads/flights/")
+    data_file = models.FileField(upload_to="flights/")
     description = models.CharField(max_length=500, blank=True)
     created = models.DateTimeField(default=timezone.now)
     departure = models.ForeignKey("Airport", on_delete=models.SET_NULL, related_name="departures", null=True)

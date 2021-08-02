@@ -12,7 +12,7 @@ class Picture(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="pictures")
     name = models.CharField(max_length=100, null=False, blank=False)
-    data_file = models.ImageField(upload_to="uploads/pictures/")
+    data_file = models.ImageField(upload_to="pictures/")
     description = models.CharField(max_length=500, blank=True)
     created = models.DateTimeField(default=timezone.now)
     flight = models.ForeignKey(Flight, on_delete=models.SET_NULL, related_name="pictures", null=True, blank=True)
