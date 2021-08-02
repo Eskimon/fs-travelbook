@@ -28,8 +28,8 @@ export function drawFlight(departure, arrival, points, map, color) {
   if(wrap) {
     stopLoc.lng += (stopLoc.lng < 0) ? 360 : -360
   }
-  let dep_mark = L.marker(startLoc).addTo(map)
-  let arr_mark = L.marker(stopLoc).addTo(map)
+  let dep_mark = L.marker(startLoc, {icon: window.take_off_icon, zIndexOffset: 500}).addTo(map)
+  let arr_mark = L.marker(stopLoc, {icon: window.landing_icon, zIndexOffset: 600}).addTo(map)
 
   return {polyline, dep_mark, arr_mark}
 }
