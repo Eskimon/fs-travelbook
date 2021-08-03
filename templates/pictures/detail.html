@@ -12,25 +12,30 @@
     </header>
     <div class="card-content">
       <div class="content">
+        {% if object.description %}
         <p class="subtitle is-6"><em>{{ object.description }}</em></p>
+        {% endif %}
 
         <p class="mb-0"><strong>Coordinates:</strong> {{ object.lat }} - {{ object.lon }}</p>
         {% if object.flight %}
+        {% if object.flight.is_public or request.user == object.owner %}
         <p class="mb-0"><em>Attached to flight <strong><a href="{% url 'flights:detail' object.flight.pk %}" title="{{ object.flight.description }}">{{ object.flight.name }}</a></strong></em></p>
+        {% endif %}
         {% endif %}
 
         <img class="mt-2 lb-source" src="{{ object.data_file.url }}" data-name="{{ object.name }}" data-description="{{ object.description }}">
-
+        {% if request.user == object.owner %}
         <p class="is-flex is-justify-content-space-between mt-5">
           <a class="button is-info" title="Edit this picture" href="{% url 'pictures:update' object.pk %}"><i class="mdi mdi-square-edit-outline"></i></a>
           <button class="button is-danger modal-opener" data-target="delete-pic-modal"><i class="mdi mdi-delete"></i></button>
         </p>
-
+        {% endif %}
       </div>
     </div>
   </div>
 </div>
 
+{% if request.user == object.owner %}
 <div class="modal" id="delete-pic-modal">
   <div class="modal-background"></div>
   <div class="modal-card">
@@ -48,6 +53,7 @@
     </footer>
   </div>
 </div>
+{% endif %}
 
 {% include 'lightbox.part.html' %}
 {% include 'tipeee.part.html' %}

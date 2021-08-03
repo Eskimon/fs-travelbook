@@ -8,7 +8,9 @@
   <div id="map"></div>
   <div class="infos">
     <h1 class="title is-5">{{ object.name }}</h1>
+    {% if object.description %}
     <h2 class="subtitle is-6"><em>{{ object.description }}</em></h2>
+    {% endif %}
     <p class="airport from is-clickable"><strong>From:</strong> {{ object.departure.display_name }}</p>
     <p class="airport to is-clickable"><strong>To:</strong> {{ object.arrival.display_name }}</p>
     <p><strong>Started at:</strong> {{ object.start }}</p>
@@ -80,7 +82,9 @@ document.querySelector('.airport.to').addEventListener('click', function(event) 
 });
 
 {% for picture in flight.pictures.all %}
+{% if picture.is_public or request.user == picture.owner %}
 drawPicture([{{ picture.lat }}, {{ picture.lon }}], "{{ picture.name }}", "{{ picture.description }}", "{{ picture.data_file.url }}", map)
+{% endif %}
 {% endfor %}
 
 </script>

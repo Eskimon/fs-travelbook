@@ -12,6 +12,7 @@ class Picture(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="pictures")
     name = models.CharField(max_length=100, null=False, blank=False)
+    is_public = models.BooleanField(default=False)
     data_file = models.ImageField(upload_to="pictures/")
     description = models.CharField(max_length=500, blank=True)
     created = models.DateTimeField(default=timezone.now)

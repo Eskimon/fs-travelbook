@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -16,18 +16,20 @@ class IndexView(LoginRequiredMixin, generic.ListView):
         return Picture.objects.filter(owner=self.request.user)
 
 
-class DetailView(LoginRequiredMixin, generic.DetailView):
+class DetailView(generic.DetailView):
     model = Picture
     template_name = "pictures/detail.html"
 
-    def get_queryset(self):
-        queryset = super(DeleteView, self).get_queryset()
-        return queryset.filter(owner=self.request.user)
+    def get(self, request, *args, **kwargs):
+        response = super(DetailView, self).get(request)
+        if self.object.is_public or (request.user == self.object.owner):
+            return response
+        raise Http404()
 
 
 class UpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Picture
-    fields = ["name", "description", "flight", "lat", "lon"]
+    fields = ["name", "description", "flight", "lat", "lon", "is_public"]
     template_name = "pictures/create_update.html"
 
     def get_context_data(self, **kwargs):
@@ -52,7 +54,7 @@ class DeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class CreateView(LoginRequiredMixin, generic.CreateView):
     model = Picture
-    fields = ["name", "description", "data_file", "flight", "lat", "lon"]
+    fields = ["name", "description", "data_file", "flight", "lat", "lon", "is_public"]
     template_name = "pictures/create_update.html"
 
     def get_context_data(self, **kwargs):
@@ -72,6 +74,7 @@ class CreateView(LoginRequiredMixin, generic.CreateView):
 
     @transaction.atomic
     def form_valid(self, form):
+        # TODO check that flight belong to user
         obj = form.save(commit=False)
         obj.owner = self.request.user
         obj.save()
