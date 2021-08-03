@@ -169,6 +169,9 @@ var flights = {}
 {% if object.flight %}
 polyline = drawFlight(flights["{{ object.flight.id }}"].dep, flights["{{ object.flight.id }}"].arr, flights["{{ object.flight.id }}"].pts, map)
 {% comment %} map.fitBounds(polyline.polyline.getBounds()) {% endcomment %}
+{% elif form.flight.value %}
+polyline = drawFlight(flights["{{ form.flight.value }}"].dep, flights["{{ form.flight.value }}"].arr, flights["{{ form.flight.value }}"].pts, map)
+map.fitBounds(polyline.polyline.getBounds())
 {% endif %}
 // Redraw flight when selection change
 document.getElementById("id_flight").addEventListener('change', function(event) {
