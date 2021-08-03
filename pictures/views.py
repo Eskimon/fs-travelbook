@@ -20,6 +20,10 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
     model = Picture
     template_name = "pictures/detail.html"
 
+    def get_queryset(self):
+        queryset = super(DeleteView, self).get_queryset()
+        return queryset.filter(owner=self.request.user)
+
 
 class UpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Picture
@@ -31,11 +35,19 @@ class UpdateView(LoginRequiredMixin, generic.UpdateView):
         context["flights"] = Flight.objects.filter(owner=self.request.user).all()
         return context
 
+    def get_queryset(self):
+        queryset = super(UpdateView, self).get_queryset()
+        return queryset.filter(owner=self.request.user)
+
 
 class DeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Picture
     template_name = "pictures/detail.html"
     success_url = reverse_lazy("pictures:list")
+
+    def get_queryset(self):
+        queryset = super(DeleteView, self).get_queryset()
+        return queryset.filter(owner=self.request.user)
 
 
 class CreateView(LoginRequiredMixin, generic.CreateView):

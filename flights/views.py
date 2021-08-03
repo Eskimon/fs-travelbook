@@ -19,17 +19,29 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
     model = Flight
     template_name = "flights/detail.html"
 
+    def get_queryset(self):
+        queryset = super(DetailView, self).get_queryset()
+        return queryset.filter(owner=self.request.user)
+
 
 class UpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Flight
     fields = ["name", "description"]
     template_name = "flights/create_update.html"
 
+    def get_queryset(self):
+        queryset = super(UpdateView, self).get_queryset()
+        return queryset.filter(owner=self.request.user)
+
 
 class DeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Flight
     template_name = "flights/detail.html"
     success_url = reverse_lazy("flights:list")
+
+    def get_queryset(self):
+        queryset = super(DeleteView, self).get_queryset()
+        return queryset.filter(owner=self.request.user)
 
 
 class CreateView(LoginRequiredMixin, generic.CreateView):
