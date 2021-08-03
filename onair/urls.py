@@ -24,7 +24,7 @@ from myuser.views import mapview
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", TemplateView.as_view(template_name="home.html"), name="home"),
-    path("user/", include("myuser.urls")),
+    path("accounts/", include("myuser.urls")),
     path("flights/", include("flights.urls")),
     path("pictures/", include("pictures.urls")),
     path("map/", mapview, name="map"),
