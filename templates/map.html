@@ -5,6 +5,12 @@
   <div id="map"></div>
 
   <div class="infos">
+    <p class="mb-3">
+      <label class="checkbox">
+        <input type="checkbox" id="pictures-toggle">
+        Show/hide pictures
+      </label>
+    </p>
     <ul class="flight-list">
       {% for flight in flights.all %}
         <li class="is-clickable" data-flightid="{{ flight.id }}" title="{{ flight.description }} ({{ flight.departure.display_name }} - {{ flight.arrival.display_name }})">
@@ -31,6 +37,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // Draw all the flights
 let polys = {}
 let pictures = {}
+pictures["None"] = []
 
 {% for flight in flights.all %}
 polys["{{ flight.id }}"] = drawFlight(
@@ -82,8 +89,26 @@ let picture = undefined
 picture = drawPicture([{{ picture.lat }}, {{ picture.lon }}], "{{ picture.name }}", "{{ picture.description }}", "{{ picture.data_file.url }}", map)
 {% if picture.flight %}
 pictures["{{ picture.flight.id }}"].push(picture)
+{% else %}
+pictures["None"].push(picture)
 {% endif %}
 {% endfor %}
+
+document.getElementById("pictures-toggle").addEventListener('click', (event) => {
+  if(event.target.checked) {
+    for(let flight in pictures) {
+      pictures[flight].forEach((item) => {
+        item.marker.addTo(map)
+      })
+    }
+  } else {
+    for(let flight in pictures) {
+      pictures[flight].forEach((item) => {
+        item.marker.removeFrom(map)
+      })
+    }
+  }
+})
 
 </script>
 {% endblock %}
