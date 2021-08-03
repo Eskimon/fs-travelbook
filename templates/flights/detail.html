@@ -14,15 +14,17 @@
     <p><strong>Started at:</strong> {{ object.start }}</p>
     <p><strong>Airborn at:</strong> {{ object.takeoff }}</p>
     <p><strong>Landing at:</strong> {{ object.landing }}</p>
-
+    {% if request.user == object.owner %}
     <p class="is-flex is-justify-content-space-between mt-5">
       <a class="button is-link" title="Add a picture to this flight" href="{% url 'pictures:create' %}?flight={{ flight.id }}"><i class="mdi mdi-image-plus"></i></a>
       <a class="button is-info" title="Edit this flight" href="{% url 'flights:update' object.pk %}"><i class="mdi mdi-square-edit-outline"></i></a>
       <button class="button is-danger modal-opener" data-target="delete-flight-modal"><i class="mdi mdi-delete"></i></button>
     </p>
+    {% endif %}
   </div>
 </div>
 
+{% if request.user == object.owner %}
 <div class="modal" id="delete-flight-modal">
   <div class="modal-background"></div>
   <div class="modal-card">
@@ -40,6 +42,7 @@
     </footer>
   </div>
 </div>
+{% endif %}
 
 {% comment %} TODO: on click on departure/arrival <p> tag, center map on airport {% endcomment %}
 {% include 'tipeee.part.html' %}

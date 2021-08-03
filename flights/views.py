@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -15,18 +15,20 @@ class IndexView(LoginRequiredMixin, generic.ListView):
         return Flight.objects.filter(owner=self.request.user)
 
 
-class DetailView(LoginRequiredMixin, generic.DetailView):
+class DetailView(generic.DetailView):
     model = Flight
     template_name = "flights/detail.html"
 
-    def get_queryset(self):
-        queryset = super(DetailView, self).get_queryset()
-        return queryset.filter(owner=self.request.user)
+    def get(self, request, *args, **kwargs):
+        response = super(DetailView, self).get(request)
+        if self.object.is_public or (request.user == self.object.owner):
+            return response
+        raise Http404()
 
 
 class UpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Flight
-    fields = ["name", "description"]
+    fields = ["name", "description", "is_public"]
     template_name = "flights/create_update.html"
 
     def get_queryset(self):
@@ -46,7 +48,7 @@ class DeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class CreateView(LoginRequiredMixin, generic.CreateView):
     model = Flight
-    fields = ["name", "description", "data_file"]
+    fields = ["name", "description", "data_file", "is_public"]
     template_name = "flights/create_update.html"
 
     @transaction.atomic
