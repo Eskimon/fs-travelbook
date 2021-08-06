@@ -38,7 +38,7 @@ class PreviewView(generic.DetailView):
     template_name = "flights/preview.html"
 
     def get(self, request, *args, **kwargs):
-        if request.META["REMOTE_ADDR"] in settings.PREVIEW_ALLOWED_IPS:
+        if request.META["HTTP_X_REAL_IP"] in settings.PREVIEW_ALLOWED_IPS:
             return super(PreviewView, self).get(request)
         return HttpResponseForbidden("<h1>Forbidden</h1>")
 
