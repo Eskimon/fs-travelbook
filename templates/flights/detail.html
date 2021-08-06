@@ -71,7 +71,7 @@ let pts = [
 
 let polyline = drawFlight(dep, arr, pts, map)
 
-map.fitBounds([dep, arr])
+map.fitBounds(polyline.polyline.getBounds())
 
 
 document.querySelector('.airport.from').addEventListener('click', function(event) {
