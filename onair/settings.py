@@ -142,6 +142,10 @@ WEBPACK_LOADER = {
 }
 
 
+ALLOW_PREVIEW = False
+PREVIEW_ALLOWED_IPS = []
+
+
 try:
     from .settings_dev import *  # noqa
 except ImportError:

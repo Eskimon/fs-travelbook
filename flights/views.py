@@ -1,6 +1,7 @@
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -24,6 +25,17 @@ class DetailView(generic.DetailView):
         if self.object.is_public or (request.user == self.object.owner):
             return response
         raise Http404()
+
+
+class PreviewView(generic.DetailView):
+    model = Flight
+    template_name = "flights/preview.html"
+
+    def get(self, request, *args, **kwargs):
+        print(request.META["REMOTE_ADDR"])
+        if request.META["REMOTE_ADDR"] in settings.PREVIEW_ALLOWED_IPS:
+            return super(PreviewView, self).get(request)
+        return HttpResponseForbidden("<h1>Forbidden</h1>")
 
 
 class UpdateView(LoginRequiredMixin, generic.UpdateView):

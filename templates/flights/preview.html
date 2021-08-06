@@ -1,0 +1,44 @@
+{% load static %}
+{% load render_bundle from webpack_loader %}
+
+<!doctype html>
+
+<html lang="en" style="overflow: hidden;">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  {% render_bundle 'global' 'css' %}
+  {% render_bundle 'global' 'js' %}
+</head>
+
+<body>
+  <div class="preview-flight">
+    <div id="map"></div>
+  </div>
+
+  <script>
+  var map = L.map('map', {zoomControl: false, attributionControl: false})
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map)
+
+  let dep = [{{ object.departure.lat }}, {{ object.departure.lon }}]
+  let arr = [{{ object.arrival.lat }}, {{ object.arrival.lon }}]
+  let pts = [
+  {% for wp in object.waypoints.all %}
+    [{{ wp.lat }}, {{ wp.lon }}],
+  {% endfor %}
+  ]
+
+  let polyline = drawFlight(dep, arr, pts, map)
+
+  map.fitBounds(polyline.polyline.getBounds())
+  </script>
+</body>
+
+</html>
