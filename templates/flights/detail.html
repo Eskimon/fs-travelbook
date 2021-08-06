@@ -4,25 +4,32 @@
 
 {% block content %}
 
-<div class="detail-flight">
+<div class="flight-box">
   <div id="map"></div>
-  <div class="infos">
-    <h1 class="title is-5">{{ object.name }}</h1>
-    {% if object.description %}
-    <h2 class="subtitle is-6"><em>{{ object.description }}</em></h2>
-    {% endif %}
-    <p class="airport from is-clickable"><strong>From:</strong> {{ object.departure.display_name }}</p>
-    <p class="airport to is-clickable"><strong>To:</strong> {{ object.arrival.display_name }}</p>
-    <p><strong>Started at:</strong> {{ object.start }}</p>
-    <p><strong>Airborn at:</strong> {{ object.takeoff }}</p>
-    <p><strong>Landing at:</strong> {{ object.landing }}</p>
-    {% if request.user == object.owner %}
-    <p class="is-flex is-justify-content-space-between mt-5">
-      <a class="button is-link" title="Add a picture to this flight" href="{% url 'pictures:create' %}?flight={{ flight.id }}"><i class="mdi mdi-image-plus"></i></a>
-      <a class="button is-info" title="Edit this flight" href="{% url 'flights:update' object.pk %}"><i class="mdi mdi-square-edit-outline"></i></a>
-      <button class="button is-danger modal-opener" data-target="delete-flight-modal"><i class="mdi mdi-delete"></i></button>
-    </p>
-    {% endif %}
+
+  <div class="card">
+    <header class="card-header has-background-light">
+      <p class="card-header-title is-clickable">{{ object.name }}</p>
+    </header>
+    <div class="card-content">
+    <div class="content">
+      {% if object.description %}
+      <p class="subtitle is-6"><em>{{ object.description }}</em></p>
+      {% endif %}
+
+      <p class="airport from is-clickable mb-0"><strong>From:</strong> {{ object.departure.display_name }}</p>
+      <p class="airport to is-clickable"><strong>To:</strong> {{ object.arrival.display_name }}</p>
+      <p class="mb-0"><strong>Started at:</strong> {{ object.start }}</p>
+      <p class="mb-0"><strong>Airborn at:</strong> {{ object.takeoff }}</p>
+      <p><strong>Landing at:</strong> {{ object.landing }}</p>
+      {% if request.user == object.owner %}
+      <p class="is-flex is-justify-content-space-between mt-5">
+        <a class="button is-link" title="Add a picture to this flight" href="{% url 'pictures:create' %}?flight={{ flight.id }}"><i class="mdi mdi-image-plus"></i></a>
+        <a class="button is-info" title="Edit this flight" href="{% url 'flights:update' object.pk %}"><i class="mdi mdi-square-edit-outline"></i></a>
+        <button class="button is-danger modal-opener" data-target="delete-flight-modal"><i class="mdi mdi-delete"></i></button>
+      </p>
+      {% endif %}
+    </div>
   </div>
 </div>
 
@@ -73,6 +80,9 @@ let polyline = drawFlight(dep, arr, pts, map)
 
 map.fitBounds(polyline.polyline.getBounds())
 
+document.querySelector('header').addEventListener('click', function(event) {
+  map.fitBounds(polyline.polyline.getBounds())
+});
 
 document.querySelector('.airport.from').addEventListener('click', function(event) {
   map.panTo(dep, {animate: true});

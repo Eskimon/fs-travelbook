@@ -44,10 +44,10 @@
 }
 
 /* Pictures page */
-.picture-box {
+.picture-box, .flight-box {
   position: relative;
   .card {
-    width: 400px;
+    width: 350px;
     position: absolute;
     top: calc(20px);
     left: auto;
