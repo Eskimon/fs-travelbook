@@ -1,3 +1,5 @@
+import urllib.request
+
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
@@ -10,10 +12,14 @@ from .models import Flight
 
 class IndexView(LoginRequiredMixin, generic.ListView):
     template_name = "flights/index.html"
-    context_object_name = "all_user_flights"
 
     def get_queryset(self):
         return Flight.objects.filter(owner=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context["ALLOW_PREVIEW"] = settings.ALLOW_PREVIEW
+        return context
 
 
 class DetailView(generic.DetailView):
@@ -70,4 +76,6 @@ class CreateView(LoginRequiredMixin, generic.CreateView):
         obj = form.save(commit=False)
         obj.owner = self.request.user
         obj = obj.save(reparse=True)
+        # Trigger the thumbnail generation process
+        urllib.request.urlopen(settings.PREVIEWER_URL.format(obj.pk))
         return HttpResponseRedirect(obj.get_absolute_url())

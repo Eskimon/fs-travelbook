@@ -144,7 +144,7 @@ WEBPACK_LOADER = {
 
 ALLOW_PREVIEW = False
 PREVIEW_ALLOWED_IPS = []
-
+PREVIEWER_URL = "{}"
 
 try:
     from .settings_dev import *  # noqa

@@ -1,19 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="flights-list columns is-multiline has-text-centered is-justify-content-center">
+<div class="fligths-list columns py-5 is-multiline has-text-centered is-justify-content-center">
   {% for flight in object_list %}
-    <a class="flight-box is-one-quarter is-one-fifth-fullhd" href="{% url 'flights:detail' flight.pk %}" title="{{ flight.description }}">
-      <div>
-        <h2 class="title name">{{ flight.name }}</h2>
-        <h3 class="subtitle description">{{ flight.description }}</h3>
-        <div class="meta">{{ flight.departure.ICAO }} -> {{ flight.arrival.ICAO }}</div>
+  <a class="card m-2 column is-one-quarter is-one-fifth-fullhd" href="{% url 'flights:detail' flight.pk %}">
+    <div class="card-image">
+      <figure class="image is-4by3">
+        <img src="{% if ALLOW_PREVIEW %} https://png.pimpyour.stream/i/flights/{{ flight.pk }}.png {% else %} https://via.placeholder.com/640x480 {% endif %}">
+      </figure>
+    </div>
+    <div class="card-content">
+      <div class="content">
+        <p class="title is-4">{{ flight.name }}</p>
+        <p class="subtitle is-6">{{ flight.description }}</p>
       </div>
-    </a>
+    </div>
+  </a>
   {% endfor %}
 
-  <a href="{% url 'flights:create' %}" title="Add a new flight">
-    <div class="flight-box">
+  <a class="card m-2 column is-one-quarter is-one-fifth-fullhd adder" href="{% url 'flights:create' %}" title="Add a new flight">
+    <div class="card-content is-flex">
       + Add a flight
     </div>
   </a>
