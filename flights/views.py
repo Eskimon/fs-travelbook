@@ -77,5 +77,6 @@ class CreateView(LoginRequiredMixin, generic.CreateView):
         obj.owner = self.request.user
         obj = obj.save(reparse=True)
         # Trigger the thumbnail generation process
-        urllib.request.urlopen(settings.PREVIEWER_URL.format(obj.pk))
+        if settings.ALLOW_PREVIEW:
+            urllib.request.urlopen(settings.PREVIEWER_URL.format(obj.pk))
         return HttpResponseRedirect(obj.get_absolute_url())
