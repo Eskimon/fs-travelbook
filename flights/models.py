@@ -46,17 +46,17 @@ class Flight(models.Model):
                 self.takeoff = data["Flight"]["AirborneTime"]
                 self.landing = data["Flight"]["LandedTime"]
                 # Try to get/create the depart/arrival airport
-                self.departure = Airport.objects.get_or_create(
+                self.departure = Airport.objects.update_or_create(
                     onair_id=data["Flight"]["DepartureAirportId"],
                     defaults={
                         "onair_id": data["Flight"]["DepartureAirport"]["Id"],
                         "ICAO": data["Flight"]["DepartureAirport"]["ICAO"],
-                        "IATA": data["Flight"]["DepartureAirport"]["IATA"],
+                        "IATA": data["Flight"]["DepartureAirport"].get("IATA", None),
                         "name": data["Flight"]["DepartureAirport"]["Name"],
-                        "state": data["Flight"]["DepartureAirport"]["State"],
-                        "country_code": data["Flight"]["DepartureAirport"]["CountryCode"],
-                        "country_name": data["Flight"]["DepartureAirport"]["CountryName"],
-                        "city": data["Flight"]["DepartureAirport"]["City"],
+                        "state": data["Flight"]["DepartureAirport"].get("State", None),
+                        "country_code": data["Flight"]["DepartureAirport"].get("CountryCode", None),
+                        "country_name": data["Flight"]["DepartureAirport"].get("CountryName", None),
+                        "city": data["Flight"]["DepartureAirport"].get("City", None),
                         "display_name": data["Flight"]["DepartureAirport"]["DisplayName"],
                         "lat": data["Flight"]["DepartureAirport"]["Latitude"],
                         "lon": data["Flight"]["DepartureAirport"]["Longitude"],
@@ -64,17 +64,17 @@ class Flight(models.Model):
                     },
                 )[0]
                 if data["Flight"]["ArrivalActualAirportId"]:
-                    self.arrival = Airport.objects.get_or_create(
+                    self.arrival = Airport.objects.update_or_create(
                         onair_id=data["Flight"]["ArrivalActualAirportId"],
                         defaults={
                             "onair_id": data["Flight"]["ArrivalActualAirport"]["Id"],
                             "ICAO": data["Flight"]["ArrivalActualAirport"]["ICAO"],
-                            "IATA": data["Flight"]["ArrivalActualAirport"]["IATA"],
+                            "IATA": data["Flight"]["ArrivalActualAirport"].get("IATA", None),
                             "name": data["Flight"]["ArrivalActualAirport"]["Name"],
-                            "state": data["Flight"]["ArrivalActualAirport"]["State"],
-                            "country_code": data["Flight"]["ArrivalActualAirport"]["CountryCode"],
-                            "country_name": data["Flight"]["ArrivalActualAirport"]["CountryName"],
-                            "city": data["Flight"]["ArrivalActualAirport"]["City"],
+                            "state": data["Flight"]["ArrivalActualAirport"].get("State", None),
+                            "country_code": data["Flight"]["ArrivalActualAirport"].get("CountryCode", None),
+                            "country_name": data["Flight"]["ArrivalActualAirport"].get("CountryName", None),
+                            "city": data["Flight"]["ArrivalActualAirport"].get("City", None),
                             "display_name": data["Flight"]["ArrivalActualAirport"]["DisplayName"],
                             "lat": data["Flight"]["ArrivalActualAirport"]["Latitude"],
                             "lon": data["Flight"]["ArrivalActualAirport"]["Longitude"],
@@ -82,17 +82,17 @@ class Flight(models.Model):
                         },
                     )[0]
                 if data["Flight"]["ArrivalIntendedAirportId"]:
-                    self.intended = Airport.objects.get_or_create(
+                    self.intended = Airport.objects.update_or_create(
                         onair_id=data["Flight"]["ArrivalIntendedAirportId"],
                         defaults={
                             "onair_id": data["Flight"]["ArrivalIntendedAirport"]["Id"],
                             "ICAO": data["Flight"]["ArrivalIntendedAirport"]["ICAO"],
-                            "IATA": data["Flight"]["ArrivalIntendedAirport"]["IATA"],
+                            "IATA": data["Flight"]["ArrivalIntendedAirport"].get("IATA", None),
                             "name": data["Flight"]["ArrivalIntendedAirport"]["Name"],
-                            "state": data["Flight"]["ArrivalIntendedAirport"]["State"],
-                            "country_code": data["Flight"]["ArrivalIntendedAirport"]["CountryCode"],
-                            "country_name": data["Flight"]["ArrivalIntendedAirport"]["CountryName"],
-                            "city": data["Flight"]["ArrivalIntendedAirport"]["City"],
+                            "state": data["Flight"]["ArrivalIntendedAirport"].get("State", None),
+                            "country_code": data["Flight"]["ArrivalIntendedAirport"].get("CountryCode", None),
+                            "country_name": data["Flight"]["ArrivalIntendedAirport"].get("CountryName", None),
+                            "city": data["Flight"]["ArrivalIntendedAirport"].get("City", None),
                             "display_name": data["Flight"]["ArrivalIntendedAirport"]["DisplayName"],
                             "lat": data["Flight"]["ArrivalIntendedAirport"]["Latitude"],
                             "lon": data["Flight"]["ArrivalIntendedAirport"]["Longitude"],
@@ -137,12 +137,12 @@ class Airport(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     onair_id = models.CharField(max_length=36, unique=True, null=True, blank=True)
     ICAO = models.CharField(max_length=4)  # Validator only capital letter
-    IATA = models.CharField(max_length=3)  # Validator only capital letter
+    IATA = models.CharField(max_length=3, null=True)  # Validator only capital letter
     name = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    country_code = models.CharField(max_length=2)
-    country_name = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100, null=True)
+    country_code = models.CharField(max_length=2, null=True)
+    country_name = models.CharField(max_length=100, null=True)
+    city = models.CharField(max_length=100, null=True)
     display_name = models.CharField(max_length=200)
     lat = models.DecimalField(max_digits=9, decimal_places=6)
     lon = models.DecimalField(max_digits=9, decimal_places=6)

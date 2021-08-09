@@ -1,3 +1,5 @@
+import os
+
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
@@ -42,9 +44,30 @@ class FlightViewsTests(TestCase):
             },
         )
         # The flight should have the proper id
-        flight = Flight.objects.get(pk="0b786dbf-68ad-48a7-a7c6-a652a533872b")
+        flight = Flight.objects.get(embed_id="0b786dbf-68ad-48a7-a7c6-a652a533872b")
         self.assertIsNotNone(flight)
         self.assertEquals(flight.name, "Test flight")
         self.assertEquals(flight.description, "My first flight")
         self.assertEquals(flight.waypoints.count(), 258)
-        self.assertEquals(Airport.objects.count(), 2)
+        self.assertEquals(Airport.objects.count(), 3)
+
+    def test_all_fixtures(self):
+        files = os.listdir("fixtures/onair")
+        for idx, f in enumerate(files):
+            with open("fixtures/onair/{}".format(f), "rb") as flight:
+                print("fixtures/onair/{}".format(f))
+                data = flight.read()
+                dat_file = SimpleUploadedFile(
+                    "fixtures/onair/{}".format(f),
+                    data,
+                    content_type="text/plain",
+                )
+                self.client.post(
+                    reverse("flights:create"),
+                    {
+                        "name": "Test flight {}".format(idx),
+                        "description": "My flight",
+                        "data_file": dat_file,
+                    },
+                )
+        self.assertEquals(len(Flight.objects.all()), len(files))
