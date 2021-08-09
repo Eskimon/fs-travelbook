@@ -18,6 +18,7 @@ class Flight(models.Model):
     created = models.DateTimeField(default=timezone.now)
     departure = models.ForeignKey("Airport", on_delete=models.SET_NULL, related_name="departures", null=True)
     arrival = models.ForeignKey("Airport", on_delete=models.SET_NULL, related_name="arrivals", null=True)
+    intended = models.ForeignKey("Airport", on_delete=models.SET_NULL, related_name="intended", null=True)
     start = models.DateTimeField(null=True)
     takeoff = models.DateTimeField(null=True)
     landing = models.DateTimeField(null=True)
@@ -62,23 +63,42 @@ class Flight(models.Model):
                         "alt": data["Flight"]["DepartureAirport"]["Elevation"],
                     },
                 )[0]
-                self.arrival = Airport.objects.get_or_create(
-                    onair_id=data["Flight"]["ArrivalActualAirportId"],
-                    defaults={
-                        "onair_id": data["Flight"]["ArrivalActualAirport"]["Id"],
-                        "ICAO": data["Flight"]["ArrivalActualAirport"]["ICAO"],
-                        "IATA": data["Flight"]["ArrivalActualAirport"]["IATA"],
-                        "name": data["Flight"]["ArrivalActualAirport"]["Name"],
-                        "state": data["Flight"]["ArrivalActualAirport"]["State"],
-                        "country_code": data["Flight"]["ArrivalActualAirport"]["CountryCode"],
-                        "country_name": data["Flight"]["ArrivalActualAirport"]["CountryName"],
-                        "city": data["Flight"]["ArrivalActualAirport"]["City"],
-                        "display_name": data["Flight"]["ArrivalActualAirport"]["DisplayName"],
-                        "lat": data["Flight"]["ArrivalActualAirport"]["Latitude"],
-                        "lon": data["Flight"]["ArrivalActualAirport"]["Longitude"],
-                        "alt": data["Flight"]["ArrivalActualAirport"]["Elevation"],
-                    },
-                )[0]
+                if data["Flight"]["ArrivalActualAirportId"]:
+                    self.arrival = Airport.objects.get_or_create(
+                        onair_id=data["Flight"]["ArrivalActualAirportId"],
+                        defaults={
+                            "onair_id": data["Flight"]["ArrivalActualAirport"]["Id"],
+                            "ICAO": data["Flight"]["ArrivalActualAirport"]["ICAO"],
+                            "IATA": data["Flight"]["ArrivalActualAirport"]["IATA"],
+                            "name": data["Flight"]["ArrivalActualAirport"]["Name"],
+                            "state": data["Flight"]["ArrivalActualAirport"]["State"],
+                            "country_code": data["Flight"]["ArrivalActualAirport"]["CountryCode"],
+                            "country_name": data["Flight"]["ArrivalActualAirport"]["CountryName"],
+                            "city": data["Flight"]["ArrivalActualAirport"]["City"],
+                            "display_name": data["Flight"]["ArrivalActualAirport"]["DisplayName"],
+                            "lat": data["Flight"]["ArrivalActualAirport"]["Latitude"],
+                            "lon": data["Flight"]["ArrivalActualAirport"]["Longitude"],
+                            "alt": data["Flight"]["ArrivalActualAirport"]["Elevation"],
+                        },
+                    )[0]
+                if data["Flight"]["ArrivalIntendedAirportId"]:
+                    self.intended = Airport.objects.get_or_create(
+                        onair_id=data["Flight"]["ArrivalIntendedAirportId"],
+                        defaults={
+                            "onair_id": data["Flight"]["ArrivalIntendedAirport"]["Id"],
+                            "ICAO": data["Flight"]["ArrivalIntendedAirport"]["ICAO"],
+                            "IATA": data["Flight"]["ArrivalIntendedAirport"]["IATA"],
+                            "name": data["Flight"]["ArrivalIntendedAirport"]["Name"],
+                            "state": data["Flight"]["ArrivalIntendedAirport"]["State"],
+                            "country_code": data["Flight"]["ArrivalIntendedAirport"]["CountryCode"],
+                            "country_name": data["Flight"]["ArrivalIntendedAirport"]["CountryName"],
+                            "city": data["Flight"]["ArrivalIntendedAirport"]["City"],
+                            "display_name": data["Flight"]["ArrivalIntendedAirport"]["DisplayName"],
+                            "lat": data["Flight"]["ArrivalIntendedAirport"]["Latitude"],
+                            "lon": data["Flight"]["ArrivalIntendedAirport"]["Longitude"],
+                            "alt": data["Flight"]["ArrivalIntendedAirport"]["Elevation"],
+                        },
+                    )[0]
                 super(Flight, self).save(*args, **kwargs)
                 # Add all the waypoints
                 for idx, wp in enumerate(data["StatPoints"]):

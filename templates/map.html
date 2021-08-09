@@ -42,7 +42,7 @@ pictures["None"] = []
 {% for flight in flights.all %}
 polys["{{ flight.id }}"] = drawFlight(
   [{{ flight.departure.lat }}, {{ flight.departure.lon }}],
-  [{{ flight.arrival.lat }}, {{ flight.arrival.lon }}],
+  {% if flight.arrival %}[{{ flight.arrival.lat }}, {{ flight.arrival.lon }}]{% elif flight.intended %}[{{ flight.intended.lat }}, {{ flight.intended.lon }}]{% else %}[0, 0]{% endif %},
   [{% for wp in flight.waypoints.all %}[{{ wp.lat }}, {{ wp.lon }}],{% endfor %}],
   map,
   "hsl({% widthratio forloop.counter0 1 color_step %}, 100%, 50%)"
