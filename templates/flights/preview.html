@@ -28,7 +28,13 @@
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map)
 
   let dep = [{{ object.departure.lat }}, {{ object.departure.lon }}]
+  {% if object.arrival %}
   let arr = [{{ object.arrival.lat }}, {{ object.arrival.lon }}]
+  {% elif object.intended %}
+  let arr = [{{ object.intended.lat }}, {{ object.intended.lon }}]
+  {% else %}
+  let arr = [0, 0]
+  {% endif %}
   let pts = [
   {% for wp in object.waypoints.all %}
     [{{ wp.lat }}, {{ wp.lon }}],
