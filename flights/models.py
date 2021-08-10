@@ -22,6 +22,8 @@ class Flight(models.Model):
     start = models.DateTimeField(null=True)
     takeoff = models.DateTimeField(null=True)
     landing = models.DateTimeField(null=True)
+    aircraft = models.ForeignKey("Aircraft", on_delete=models.SET_NULL, related_name="flights", null=True)
+    aircraft_identifier = models.CharField(max_length=10, blank=True)
 
     class Meta:
         ordering = ["name"]
@@ -38,7 +40,7 @@ class Flight(models.Model):
             with self.data_file.open() as f:
                 data = json.load(f)
                 test = Flight.objects.filter(embed_id=data["Flight"]["Id"])
-                if test.exists():
+                if not self.pk and test.exists():
                     return test.first()
                 self.embed_id = data["Flight"]["Id"]
                 # Some general data about the flight
@@ -99,6 +101,14 @@ class Flight(models.Model):
                             "alt": data["Flight"]["ArrivalIntendedAirport"]["Elevation"],
                         },
                     )[0]
+                self.aircraft_identifier = data["Flight"]["Aircraft"]["Identifier"]
+                self.aircraft = Aircraft.objects.update_or_create(
+                    name=data["SimAircraft"]["AircraftName"],
+                    defaults={
+                        "onair_id": data["Flight"]["Aircraft"]["Id"],
+                        "name": data["SimAircraft"]["AircraftName"],
+                    },
+                )[0]
                 super(Flight, self).save(*args, **kwargs)
                 # Add all the waypoints
                 for idx, wp in enumerate(data["StatPoints"]):
@@ -147,3 +157,9 @@ class Airport(models.Model):
     lat = models.DecimalField(max_digits=9, decimal_places=6)
     lon = models.DecimalField(max_digits=9, decimal_places=6)
     alt = models.DecimalField(max_digits=6, decimal_places=2)
+
+
+class Aircraft(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    onair_id = models.CharField(max_length=36, null=True, blank=True)
+    name = models.CharField(max_length=100, unique=True, null=False, blank=False)

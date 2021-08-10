@@ -27,6 +27,9 @@
         <p class="mb-0"><strong>Started at:</strong> {{ object.start }}</p>
         <p class="mb-0"><strong>Airborn at:</strong> {{ object.takeoff }}</p>
         <p><strong>Landing at:</strong> {{ object.landing }}</p>
+        {% if object.aircraft %}
+        <p><strong>Aircraft:</strong> {{ object.aircraft.name }} {% if object.aircraft_identifier %}({{ object.aircraft_identifier }}){% endif %}</p>
+        {% endif %}
         {% if request.user == object.owner %}
         <p class="is-flex is-justify-content-space-between mt-5">
           <a class="button is-link" title="Add a picture to this flight" href="{% url 'pictures:create' %}?flight={{ flight.id }}"><i class="mdi mdi-image-plus"></i></a>
