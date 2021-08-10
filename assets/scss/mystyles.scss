@@ -11,6 +11,10 @@
 @import "../../node_modules/bulma/sass/components/navbar.sass";
 
 
+.navbar {
+  z-index: 2000 !important;
+}
+
 .modal.is-active {
   z-index: 1000 !important;
 }

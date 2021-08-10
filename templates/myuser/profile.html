@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container is-max-desktop">
+  <h1 class="title mt-3">Settings</h1>
+  <form method="post">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+    <p class="help is-danger">{{ form.non_field_errors }}</p>
+    {% endif %}
+
+    <div class="field">
+      <label class="label" for="{{ form.icons.id_for_label }}">{{ form.icons.label }}</label>
+      <div class="control">
+        <div class="radio">
+          <label class="radio">
+            <input type="radio" name="{{ form.icons.html_name }}" {% if not form.icons.value %}checked{% endif %} value="0">
+            None
+          </label>
+          <label class="radio">
+            <input type="radio" name="{{ form.icons.html_name }}" {% if form.icons.value == 1 %}checked{% endif %} value="1">
+            Icons
+          </label>
+          <label class="radio">
+            <input type="radio" name="{{ form.icons.html_name }}" {% if form.icons.value == 2 %}checked{% endif %} value="2">
+            Circles
+          </label>
+        </div>
+      </div>
+      {% for error in form.icons.errors %}
+      <p class="help is-danger">{{ error }}</p>
+      {% endfor %}
+    </div>
+
+    <div class="field">
+      <label class="label" for="{{ form.maps.id_for_label }}">{{ form.maps.label }}</label>
+      <div class="control">
+        <div class="radio">
+          <label class="radio">
+            <input type="radio" name="{{ form.maps.html_name }}" {% if not form.maps.value %}checked{% endif %} value="0">
+            Standard
+          </label>
+          <label class="radio">
+            <input type="radio" name="{{ form.maps.html_name }}" {% if form.maps.value == 1 %}checked{% endif %} value="1">
+            Topologic
+          </label>
+          <label class="radio">
+            <input type="radio" name="{{ form.maps.html_name }}" {% if form.maps.value == 2 %}checked{% endif %} value="2">
+            Imagery
+          </label>
+        </div>
+      </div>
+      {% for error in form.maps.errors %}
+      <p class="help is-danger">{{ error }}</p>
+      {% endfor %}
+    </div>
+
+    <div class="control has-text-left">
+      <button class="button is-link" type="submit">Update</button>
+    </div>
+  </form>
+</div>
+
+{% include 'tipeee.part.html' %}
+
+{% endblock %}

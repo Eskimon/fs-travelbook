@@ -1,4 +1,4 @@
-export function drawFlight(departure, arrival, points, map, color) {
+export function drawFlight(departure, arrival, points, map, style, color) {
   //let poly = [[departure[0], departure[1]]];
   let _color = color || "#3388ff"
   let poly = []
@@ -28,8 +28,26 @@ export function drawFlight(departure, arrival, points, map, color) {
   if(wrap) {
     stopLoc.lng += (stopLoc.lng < 0) ? 360 : -360
   }
-  let dep_mark = L.marker(startLoc, {icon: window.take_off_icon, zIndexOffset: 500}).addTo(map)
-  let arr_mark = L.marker(stopLoc, {icon: window.landing_icon, zIndexOffset: 600}).addTo(map)
+  let dep_mark = null
+  let arr_mark = null
+  if(style == 1) {
+    dep_mark = L.marker(startLoc, {icon: window.take_off_icon, zIndexOffset: 500}).addTo(map)
+    arr_mark = L.marker(stopLoc, {icon: window.landing_icon, zIndexOffset: 600}).addTo(map)
+  } else if(style == 2) {
+    let pointOption = {
+      radius: 5,
+      stroke: true,
+      color: "#000000",
+      weight: 1,
+      fill: true,
+      fillColor: _color,
+      // opacity: 0,
+      // fillOpacity: 0,
+      zIndexOffset: 500,
+    }
+    dep_mark = L.circleMarker(startLoc, pointOption).addTo(map)
+    arr_mark = L.circleMarker(stopLoc, pointOption).addTo(map)
+  }
 
   return {polyline, dep_mark, arr_mark}
 }

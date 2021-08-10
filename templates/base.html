@@ -64,9 +64,17 @@
         </a>
       </div>
       <div class="navbar-end">
-        <div class="navbar-item">
-          <div class="buttons">
-            <a class="button is-light" href="{% url 'myuser:logout' %}">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            {{ request.user.username }}
+          </a>
+
+          <div class="navbar-dropdown ">
+            <a class="navbar-item" href="{% url 'myuser:update' request.user.profile.pk %}">
+              Settings
+            </a>
+            <hr class="navbar-divider">
+            <a class="navbar-item" href="{% url 'myuser:logout' %}">
               Logout
             </a>
           </div>

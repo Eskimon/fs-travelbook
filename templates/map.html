@@ -30,9 +30,23 @@
 <script>
 var map = L.map('map').setView([47.4771198,-0.5972396], 6);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+let map_choice = {{ request.user.profile.maps }}
+if(map_choice == 1) {
+  // Topo
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+  }).addTo(map);
+} else if(map_choice == 2) {
+  // Imagery
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+  }).addTo(map);
+} else {
+  // Standard
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
+  }).addTo(map);
+}
 
 // Draw all the flights
 let polys = {}
@@ -45,6 +59,7 @@ polys["{{ flight.id }}"] = drawFlight(
   {% if flight.arrival %}[{{ flight.arrival.lat }}, {{ flight.arrival.lon }}]{% elif flight.intended %}[{{ flight.intended.lat }}, {{ flight.intended.lon }}]{% else %}[0, 0]{% endif %},
   [{% for wp in flight.waypoints.all %}[{{ wp.lat }}, {{ wp.lon }}],{% endfor %}],
   map,
+  {{ request.user.profile.icons }},
   "hsl({% widthratio forloop.counter0 1 color_step %}, 100%, 50%)"
 )
 pictures["{{ flight.id }}"] = []
@@ -62,8 +77,10 @@ document.querySelectorAll("ul.flight-list li .color-box").forEach( el => {
     if(event.target.classList.contains("hide")) {
       event.target.classList.remove("hide")
       polys[event.target.parentNode.dataset.flightid].polyline.addTo(map)
-      polys[event.target.parentNode.dataset.flightid].dep_mark.addTo(map)
-      polys[event.target.parentNode.dataset.flightid].arr_mark.addTo(map)
+      if(polys[event.target.parentNode.dataset.flightid].dep_mark) {
+        polys[event.target.parentNode.dataset.flightid].dep_mark.addTo(map)
+        polys[event.target.parentNode.dataset.flightid].arr_mark.addTo(map)
+      }
       if(pictures[event.target.parentNode.dataset.flightid].length) {
         pictures[event.target.parentNode.dataset.flightid].forEach((item) => {
           item.marker.addTo(map)
@@ -72,8 +89,10 @@ document.querySelectorAll("ul.flight-list li .color-box").forEach( el => {
     } else {
       event.target.classList.add("hide")
       polys[event.target.parentNode.dataset.flightid].polyline.removeFrom(map)
-      polys[event.target.parentNode.dataset.flightid].dep_mark.removeFrom(map)
-      polys[event.target.parentNode.dataset.flightid].arr_mark.removeFrom(map)
+      if(polys[event.target.parentNode.dataset.flightid].dep_mark) {
+        polys[event.target.parentNode.dataset.flightid].dep_mark.removeFrom(map)
+        polys[event.target.parentNode.dataset.flightid].arr_mark.removeFrom(map)
+      }
       if(pictures[event.target.parentNode.dataset.flightid].length) {
         pictures[event.target.parentNode.dataset.flightid].forEach((item) => {
           item.marker.removeFrom(map)

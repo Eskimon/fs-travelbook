@@ -2,12 +2,15 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
+from django.views import generic
 
 from flights.models import Flight
 from pictures.models import Picture
 
 from .forms import NewUserForm
+from .models import MyUser
 
 
 def signup(request):
@@ -61,3 +64,18 @@ def mapview(request):
         "map.html",
         {"flights": flights, "color_step": max(20, 360 / max(1, len(flights))), "pictures": pictures},
     )
+
+
+class UpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = MyUser
+    fields = ["icons", "maps"]
+    template_name = "myuser/profile.html"
+
+    def get_queryset(self):
+        queryset = super(UpdateView, self).get_queryset()
+        return queryset.filter(user=self.request.user)
+
+    def form_valid(self, form):
+        response = super(UpdateView, self).form_valid(form)
+        messages.success(self.request, "Settings updated!")
+        return response
