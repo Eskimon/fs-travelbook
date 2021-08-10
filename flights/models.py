@@ -32,7 +32,7 @@ class Flight(models.Model):
     def get_absolute_url(self):
         return reverse("flights:detail", args=[self.id])
 
-    def save(self, reparse=False, *args, **kwargs):
+    def save(self, reparse=False, creation=False, *args, **kwargs):
         if reparse:
             # Delete all waypoint if any
             self.waypoints.all().delete()
@@ -40,7 +40,7 @@ class Flight(models.Model):
             with self.data_file.open() as f:
                 data = json.load(f)
                 test = Flight.objects.filter(embed_id=data["Flight"]["Id"])
-                if not self.pk and test.exists():
+                if creation and test.exists():
                     return test.first()
                 self.embed_id = data["Flight"]["Id"]
                 # Some general data about the flight

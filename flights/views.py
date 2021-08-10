@@ -75,7 +75,7 @@ class CreateView(LoginRequiredMixin, generic.CreateView):
         # return response
         obj = form.save(commit=False)
         obj.owner = self.request.user
-        obj = obj.save(reparse=True)
+        obj = obj.save(reparse=True, creation=True)
         # Trigger the thumbnail generation process
         if settings.ALLOW_PREVIEW:
             urllib.request.urlopen(settings.PREVIEWER_URL.format(obj.pk))
