@@ -26,7 +26,7 @@ class Flight(models.Model):
     aircraft_identifier = models.CharField(max_length=10, blank=True)
 
     class Meta:
-        ordering = ["name"]
+        ordering = ["-start"]
         constraints = [models.UniqueConstraint(fields=["owner", "embed_id"], name="unique flight_owner")]
 
     def get_absolute_url(self):
