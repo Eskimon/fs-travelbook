@@ -70,7 +70,7 @@
 <script>
 var map = L.map('map').setView([47.4771198,-0.5972396], 6);
 
-let map_choice = {{ request.user.profile.maps }}
+let map_choice = {% if request.user.profile %}{{ request.user.profile.maps }}{% else %}1{% endif %}
 if(map_choice == 1) {
   // Topo
   L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
@@ -105,7 +105,7 @@ let pts = [
 {% endfor %}
 ]
 
-let polyline = drawFlight(dep, arr, pts, map, {{ request.user.profile.icons }})
+let polyline = drawFlight(dep, arr, pts, map, {% if request.user.profile %}{{ request.user.profile.icons }}{% else %}1{% endif %})
 
 map.fitBounds(polyline.polyline.getBounds())
 
