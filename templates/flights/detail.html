@@ -70,7 +70,7 @@
 <script>
 var map = L.map('map').setView([47.4771198,-0.5972396], 6);
 
-let map_choice = {% if request.user.profile %}{{ request.user.profile.maps }}{% else %}1{% endif %}
+let map_choice = {% if request.user.profile %}{{ request.user.profile.maps }}{% else %}0{% endif %}
 if(map_choice == 1) {
   // Topo
   L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
