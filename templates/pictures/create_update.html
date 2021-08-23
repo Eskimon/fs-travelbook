@@ -188,7 +188,7 @@ var flights = {}
 {% for flight in flights.all %}
   flights['{{ flight.id }}'] = {
     dep: [{{ flight.departure.lat }}, {{ flight.departure.lon }}],
-    arr: [{{ flight.arrival.lat }}, {{ flight.arrival.lon }}],
+    arr: {% if flight.arrival %}[{{ flight.arrival.lat }}, {{ flight.arrival.lon }}]{% else %}[{{ flight.intended.lat }}, {{ flight.intended.lon }}]{% endif %},
     pts: [{% for wp in flight.waypoints.all %}[{{ wp.lat }}, {{ wp.lon }}],{% endfor %}],
   }
 {% endfor %}
@@ -232,6 +232,13 @@ marker.on('moveend', (event) => {
   let latlng = marker.getLatLng()
   document.getElementById("id_lat").value = latlng.lat.toFixed(6)
   document.getElementById("id_lon").value = latlng.lng.toFixed(6)
+});
+
+map.on('click', (event) => {
+  // let latlng = marker.getLatLng()
+  // document.getElementById("id_lat").value = latlng.lat.toFixed(6)
+  // document.getElementById("id_lon").value = latlng.lng.toFixed(6)
+  console.log(event)
 });
 
 </script>
