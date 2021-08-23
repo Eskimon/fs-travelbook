@@ -160,6 +160,7 @@ document.querySelector('button[type=submit]').addEventListener('click', function
 });
 
 
+// Setup map
 var map = L.map('map').setView([47.4771198,-0.5972396], 6);
 
 let map_choice = {{ request.user.profile.maps }}
@@ -181,7 +182,6 @@ if(map_choice == 1) {
 }
 
 
-
 // Draw flight if any
 var polyline = {}
 var flights = {}
@@ -192,6 +192,7 @@ var flights = {}
     pts: [{% for wp in flight.waypoints.all %}[{{ wp.lat }}, {{ wp.lon }}],{% endfor %}],
   }
 {% endfor %}
+
 {% if object.flight %}
 polyline = drawFlight(flights["{{ object.flight.id }}"].dep, flights["{{ object.flight.id }}"].arr, flights["{{ object.flight.id }}"].pts, map, {{ request.user.profile.icons }})
 {% comment %} map.fitBounds(polyline.polyline.getBounds()) {% endcomment %}
@@ -199,6 +200,7 @@ polyline = drawFlight(flights["{{ object.flight.id }}"].dep, flights["{{ object.
 polyline = drawFlight(flights["{{ form.flight.value }}"].dep, flights["{{ form.flight.value }}"].arr, flights["{{ form.flight.value }}"].pts, map, {{ request.user.profile.icons }})
 map.fitBounds(polyline.polyline.getBounds())
 {% endif %}
+
 // Redraw flight when selection change
 document.getElementById("id_flight").addEventListener('change', function(event) {
   if(polyline.polyline) {
@@ -208,10 +210,26 @@ document.getElementById("id_flight").addEventListener('change', function(event) 
   }
   let id = event.target.value
   polyline = drawFlight(flights[id].dep, flights[id].arr, flights[id].pts, map, {{ request.user.profile.icons }})
+  map.fitBounds(polyline.polyline.getBounds())
+  // Move marker somewhere on the flight, on any waypoint
+  let randIdx = Math.floor((flights[id].pts.length / 3) + ((Math.random() * flights[id].pts.length) / 2))
+  let point = flights[id].pts[randIdx]
+  marker.setLatLng(point)
+  document.getElementById("id_lat").value = point[0].toFixed(6)
+  document.getElementById("id_lon").value = point[1].toFixed(6)
 });
 
-
+// Marker for the pic
 var marker = L.marker([{{ form.lat.value|default_if_none:0.000 }}, {{ form.lon.value|default_if_none:0.000 }}], {draggable: true, autoPan: true}).addTo(map)
+{% if form.flight.value and not object %}
+// The object doesn't exist but a flight is provided, move towards it with random coords
+let flightId = "{{ form.flight.value }}"
+let randIdx = Math.floor((flights[flightId].pts.length / 3) + ((Math.random() * flights[flightId].pts.length) / 2))
+let point = flights[flightId].pts[randIdx]
+marker.setLatLng(point)
+document.getElementById("id_lat").value = point[0].toFixed(6)
+document.getElementById("id_lon").value = point[1].toFixed(6)
+{% endif %}
 map.panTo(marker.getLatLng())
 
 // move marker according to the form input change
@@ -228,17 +246,19 @@ document.getElementById("id_lon").addEventListener('change', function(event) {
   map.panTo(marker.getLatLng())
 });
 
+// Move marker on drag
 marker.on('moveend', (event) => {
   let latlng = marker.getLatLng()
   document.getElementById("id_lat").value = latlng.lat.toFixed(6)
   document.getElementById("id_lon").value = latlng.lng.toFixed(6)
 });
 
+// Move marker on map click
 map.on('click', (event) => {
-  // let latlng = marker.getLatLng()
-  // document.getElementById("id_lat").value = latlng.lat.toFixed(6)
-  // document.getElementById("id_lon").value = latlng.lng.toFixed(6)
-  console.log(event)
+  let latlng = event.latlng
+  marker.setLatLng(latlng)
+  document.getElementById("id_lat").value = latlng.lat.toFixed(6)
+  document.getElementById("id_lon").value = latlng.lng.toFixed(6)
 });
 
 </script>
