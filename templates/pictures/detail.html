@@ -86,7 +86,7 @@ if(map_choice == 1) {
 
 {% if object.flight %}
 let dep = [{{ object.flight.departure.lat }}, {{ object.flight.departure.lon }}]
-let arr = [{{ object.flight.arrival.lat }}, {{ object.flight.arrival.lon }}]
+let arr = {% if object.flight.arrival %}[{{ object.flight.arrival.lat }}, {{ object.flight.arrival.lon }}]{% else %}[{{ object.flight.intended.lat }}, {{ object.flight.intended.lon }}]{% endif %}
 let pts = [
 {% for wp in object.flight.waypoints.all %}
   [{{ wp.lat }}, {{ wp.lon }}],
