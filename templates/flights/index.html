@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="has-text-centered mt-4">
+  <a class="button is-link" href="{% url 'flights:create' %}" title="Add a new picture"><i class="mdi mdi-plus mr-2"></i> Add a flight</a>
+</div>
+
 <div class="fligths-list columns py-5 is-multiline has-text-centered is-justify-content-center">
   {% for flight in object_list %}
   <a class="card m-2 column is-one-quarter is-one-fifth-fullhd" href="{% url 'flights:detail' flight.pk %}">
@@ -17,12 +21,6 @@
     </div>
   </a>
   {% endfor %}
-
-  <a class="card m-2 column is-one-quarter is-one-fifth-fullhd adder" href="{% url 'flights:create' %}" title="Add a new flight">
-    <div class="card-content is-flex">
-      + Add a flight
-    </div>
-  </a>
 </div>
 
 {% include 'tipeee.part.html' %}

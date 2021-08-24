@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="has-text-centered mt-4">
+  <a class="button is-link" href="{% url 'pictures:create' %}" title="Add a new picture"><i class="mdi mdi-plus mr-2"></i> Add a picture</a>
+</div>
+
 <div class="pictures-list columns py-5 is-multiline has-text-centered is-justify-content-center">
   {% for picture in object_list %}
   <a class="card m-2 column is-one-quarter is-one-fifth-fullhd" href="{% url 'pictures:detail' picture.pk %}">
@@ -17,12 +21,6 @@
     </div>
   </a>
   {% endfor %}
-
-  <a class="card m-2 column is-one-quarter is-one-fifth-fullhd adder" href="{% url 'pictures:create' %}" title="Add a new picture">
-    <div class="card-content is-flex">
-      + Add a picture
-    </div>
-  </a>
 </div>
 
 {% include 'tipeee.part.html' %}
