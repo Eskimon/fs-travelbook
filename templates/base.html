@@ -13,7 +13,11 @@
   <title>{% block title %}{% endblock %}</title>
   <meta name="description" content="{% block description %}{% endblock %}">
   <meta name="author" content="{% block author %}{% endblock %}">
-  {% block og %}{% endblock %}
+
+  <meta property="og:site_name" content="travelbook.eskimon.fr">
+  <meta property="og:type" content="website">
+  {% block extra_og %}{% endblock %}
+
   <link rel="icon" href="/favicon.ico">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">

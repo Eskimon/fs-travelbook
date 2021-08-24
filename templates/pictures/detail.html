@@ -2,16 +2,20 @@
 
 {% load static %}
 
-{% block og %}
+{% block extra_og %}
 <meta property="og:title" content="{{ object.name }}">
 <meta property="og:author" content="{{ object.owner.username }}">
-<meta property="og:type" content="website">
 <!-- TODO change those hardcoded url!! -->
 <meta property="og:url" content="https://travelbook.eskimon.fr{{ object.get_absolute_url }}">
 <meta property="og:image" content="https://travelbook.eskimon.fr{{ object.data_file.url }}">
-{% if object.description %}
-<meta property="og:description" content="{{ object.description }}">
-{% endif %}
+{% if object.description %}<meta property="og:description" content="{{ object.description }}">{% endif %}
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="travelbook.eskimon.fr">
+<!--<meta name="twitter:creator" content="{{ object.owner.username }}">-->
+<meta name="twitter:title" content="{{ object.name }}">
+<meta name="twitter:image" content="https://travelbook.eskimon.fr{{ object.data_file.url }}">
+{% if object.description %}<meta name="twitter:description" content="{{ object.description }}">{% endif %}
 {% endblock %}
 
 {% block content %}
