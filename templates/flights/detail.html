@@ -2,6 +2,18 @@
 
 {% load static %}
 
+{% block og %}
+<meta property="og:title" content="{{ object.name }}">
+<meta property="og:author" content="{{ object.owner.username }}">
+<meta property="og:type" content="website">
+<!-- TODO change those hardcoded url!! -->
+<meta property="og:url" content="https://travelbook.eskimon.fr{{ object.get_absolute_url }}">
+<meta property="og:image" content="https://png.pimpyour.stream/i/flights/{{ object.pk }}.png">
+{% if object.description %}
+<meta property="og:description" content="{{ object.description }}">
+{% endif %}
+{% endblock %}
+
 {% block content %}
 
 <div class="flight-box">
