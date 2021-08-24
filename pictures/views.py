@@ -10,6 +10,7 @@ from .models import Picture
 
 
 class IndexView(LoginRequiredMixin, generic.ListView):
+    paginate_by = 10
     template_name = "pictures/index.html"
 
     def get_queryset(self):

@@ -11,6 +11,7 @@ from .models import Flight
 
 
 class IndexView(LoginRequiredMixin, generic.ListView):
+    paginate_by = 10
     template_name = "flights/index.html"
 
     def get_queryset(self):
