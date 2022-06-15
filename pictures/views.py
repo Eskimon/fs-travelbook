@@ -3,6 +3,7 @@ from django.db import transaction
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import reverse
 from django.urls import reverse_lazy
+from django.utils.http import urlencode
 from django.views import generic
 
 from flights.models import Flight
@@ -85,5 +86,11 @@ class CreateView(LoginRequiredMixin, generic.CreateView):
     def post(self, request, *args, **kwargs):
         next_page = super(CreateView, self).post(request, *args, **kwargs)
         if "_another" in request.POST:
-            next_page = HttpResponseRedirect(reverse("pictures:create"))
+            url = f'{reverse("pictures:create")}'
+            # Keep the flight if provided
+            flight_id = request.POST["flight"]
+            if flight_id:
+                flight = {"flight": flight_id}
+                url += f"?{urlencode(flight)}"
+            next_page = HttpResponseRedirect(url)
         return next_page
