@@ -105,7 +105,7 @@
             <label class="label" for="{{ form.is_public.id_for_label }}">{{ form.is_public.label }}</label>
             <div class="control">
               <input type="checkbox" name="{{ form.is_public.html_name  }}" id="{{ form.is_public.id_for_label }}" {% if form.is_public.value %}checked{% endif %} />
-              Mark this picture as public
+              <label for="{{ form.is_public.id_for_label }}">Mark this picture as public</label>
             </div>
             {% for error in form.is_public.errors %}
             <p class="help is-danger">{{ error }}</p>
@@ -113,20 +113,28 @@
             <div class="help">A public picture can be accessed to anyone with its URL, without loggin in or being its owner. Useful if you want to share a picture with some friends.</div>
           </div>
 
-          <div class="control has-text-right">
           {% if not object %}
-            <button class="button is-link" type="submit">
-              <span class="icon mr-1">
-                <i class="mdi mdi-plus"></i>
-              </span>
-              Add
-            </button>
-          {% else %}
-            <button class="button is-link" type="submit">
-              Update
-            </button>
+            <div class="control is-flex is-justify-content-space-between">
+              <button class="button is-link" type="submit" name="_another">
+                <span class="icon mr-1">
+                  <i class="mdi mdi-plus"></i>
+                </span>
+                Save and add another
+              </button>
+              <button class="button is-link" type="submit" name="_save">
+                <span class="icon mr-1">
+                  <i class="mdi mdi-plus"></i>
+                </span>
+                Save
+              </button>
+            <div>
+            {% else %}
+            <div class="control has-text-right">
+              <button class="button is-link" type="submit" name="_update">
+                Update
+              </button>
+            </div>
           {% endif %}
-          </div>
         </form>
 
         {% if object %}

@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
 from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import reverse
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -80,3 +81,9 @@ class CreateView(LoginRequiredMixin, generic.CreateView):
         obj.owner = self.request.user
         obj.save()
         return HttpResponseRedirect(obj.get_absolute_url())
+
+    def post(self, request, *args, **kwargs):
+        next_page = super(CreateView, self).post(request, *args, **kwargs)
+        if "_another" in request.POST:
+            next_page = HttpResponseRedirect(reverse("pictures:create"))
+        return next_page
