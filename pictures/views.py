@@ -16,7 +16,11 @@ class IndexView(LoginRequiredMixin, generic.ListView):
     template_name = "pictures/index.html"
 
     def get_queryset(self):
-        return Picture.objects.filter(owner=self.request.user)
+        flights = self.request.GET.getlist("flights", [])
+        qs = Picture.objects.filter(owner=self.request.user)
+        if flights:
+            qs = qs.filter(flight__in=flights)
+        return qs
 
 
 class DetailView(generic.DetailView):

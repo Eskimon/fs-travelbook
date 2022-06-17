@@ -1,8 +1,21 @@
 {% extends 'base.html' %}
+{% load get_item %}
+
 
 {% block content %}
-<div class="has-text-centered mt-4">
-  <a class="button is-link" href="{% url 'pictures:create' %}" title="Add a new picture"><i class="mdi mdi-plus mr-2"></i> Add a picture</a>
+<div class="is-flex is-justify-content-center is-align-items-center mt-4">
+  <a class="button is-link mr-6" href="{% url 'pictures:create' %}" title="Add a new picture"><i class="mdi mdi-plus mr-2"></i> Add a picture</a>
+  <form class="ml-6 is-flex is-align-items-center" action="#" method="GET">
+    <label class="mr-2" for="flights">Show only picture for flight(s)</label>
+    <div class="select is-multiple">
+      <select id="flights" name="flights" multiple size="4">
+        {% for flight in user.flights.all %}
+          <option value="{{ flight.id }}" {% get_selected_item request.GET "flights" flight.id %}>{{ flight.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="ml-2"><i class="mdi mdi-image-filter-none mr-2"></i>Filter</button>
+  </form>
 </div>
 
 <div class="pictures-list columns py-5 is-multiline has-text-centered is-justify-content-center">
