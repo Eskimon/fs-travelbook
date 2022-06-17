@@ -57,7 +57,7 @@ def logout_view(request):
 
 @login_required
 def mapview(request):
-    flights = Flight.objects.filter(owner=request.user)
+    flights = Flight.objects.filter(owner=request.user).prefetch_related("waypoints")
     pictures = Picture.objects.filter(owner=request.user)
     return render(
         request,
