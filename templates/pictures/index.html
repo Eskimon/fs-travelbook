@@ -40,7 +40,9 @@
 <nav class="pagination is-centered" role="navigation" aria-label="pagination">
   <ul class="pagination-list">
     {% for num in page_obj.paginator.page_range %}
-    <li><a class="is-justify-content-center pagination-link {% if num == page_obj.number %}is-current{% endif %}" aria-label="Goto page {{ num }}" href="{% if num == page_obj.number %}#{% else %}?page={{ num }}{% endif %}">{{ num }}</a></li>
+      <li>
+        <a class="is-justify-content-center pagination-link {% if num == page_obj.number %}is-current{% endif %}" aria-label="Goto page {{ num }}" href="?{% if num == page_obj.number %}{% else %}&page={{ num }}{% endif %}&{% encode_flights_item request.GET %}">{{ num }}</a>
+      </li>
     {% endfor %}
   </ul>
 </nav>
