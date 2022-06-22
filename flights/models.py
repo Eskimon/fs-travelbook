@@ -128,14 +128,14 @@ class Flight(models.Model):
     def full_dico(self):
         out = {}
         out["flight"]: str(self.id)
-        out["departure"] = {"lat": self.departure.lat, "lon": self.departure.lon}
+        out["departure"] = [self.departure.lat, self.departure.lon]
         if self.arrival:
-            out["arrival"] = {"lat": self.arrival.lat, "lon": self.arrival.lon}
+            out["arrival"] = [self.arrival.lat, self.arrival.lon]
         elif self.intended:
-            out["arrival"] = {"lat": self.intended.lat, "lon": self.intended.lon}
+            out["arrival"] = [self.intended.lat, self.intended.lon]
         else:
-            out["arrival"] = {"lat": 0, "lon": 0}
-        out["waypoints"] = [{"lat": wp.lat, "lon": wp.lon} for wp in self.waypoints.all()]
+            out["arrival"] = [0, 0]
+        out["waypoints"] = [[wp.lat, wp.lon] for wp in self.waypoints.all()]
         return out
 
 

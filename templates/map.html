@@ -58,18 +58,10 @@ pictures["None"] = []
   fetch("{% url 'flights:detail' flight.pk %}")
     .then(response => response.json())
     .then(result => {
-        console.log(result)
-        let departure = [result.departure.lat, result.departure.lon]
-        let arrival = [result.arrival.lat, result.arrival.lon]
-        let waypoints = []
-        for(let i=0; i < result.waypoints.length; i++) {
-          waypoints.push([result.waypoints[i].lat, result.waypoints[i].lon])
-        }
-
         polys["{{ flight.id }}"] = drawFlight(
-          departure,
-          arrival,
-          waypoints,
+          result.departure,
+          result.arrival,
+          result.waypoints,
           map,
           {{ request.user.profile.icons }},
           "hsl({% widthratio forloop.counter0 1 color_step %}, 100%, 50%)"
