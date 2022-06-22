@@ -3,7 +3,12 @@ import urllib.request
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import transaction
-from django.http import Http404, HttpResponseForbidden, HttpResponseRedirect
+from django.http import (
+    Http404,
+    HttpResponseForbidden,
+    HttpResponseRedirect,
+    JsonResponse,
+)
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -29,9 +34,13 @@ class DetailView(generic.DetailView):
 
     def get(self, request, *args, **kwargs):
         response = super(DetailView, self).get(request)
-        if self.object.is_public or (request.user == self.object.owner):
-            return response
-        raise Http404()
+        if not (self.object.is_public or (request.user == self.object.owner)):
+            raise Http404()
+        if request.is_ajax:
+            response = JsonResponse(self.object.full_dico())
+        # else:
+        #     response = super(DetailView, self).get(request)
+        return response
 
 
 class PreviewView(generic.DetailView):

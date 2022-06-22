@@ -13,7 +13,7 @@
     </p>
     <ul class="flight-list">
       {% for flight in flights.all %}
-        <li class="is-clickable" data-flightid="{{ flight.id }}" title="{{ flight.description }} ({{ flight.departure.display_name }} - {% if flight.arrival %}{{ flight.arrival.display_name }}{% else %}{{ flight.intended.display_name }}{% endif %})">
+        <li id="flight-{{ flight.id }}" class="loading" data-flightid="{{ flight.id }}" title="{{ flight.description }} ({{ flight.departure.display_name }} - {% if flight.arrival %}{{ flight.arrival.display_name }}{% else %}{{ flight.intended.display_name }}{% endif %})">
           <span class="color-box" style="background-color: hsl({% widthratio forloop.counter0 1 color_step %}, 100%, 50%)"></span>
           <span class="flight-name">{{ flight.name }}</span>
         </li>
@@ -54,15 +54,32 @@ let pictures = {}
 pictures["None"] = []
 
 {% for flight in flights.all %}
-polys["{{ flight.id }}"] = drawFlight(
-  [{{ flight.departure.lat }}, {{ flight.departure.lon }}],
-  {% if flight.arrival %}[{{ flight.arrival.lat }}, {{ flight.arrival.lon }}]{% elif flight.intended %}[{{ flight.intended.lat }}, {{ flight.intended.lon }}]{% else %}[0, 0]{% endif %},
-  [{% for wp in flight.waypoints.all %}[{{ wp.lat }}, {{ wp.lon }}],{% endfor %}],
-  map,
-  {{ request.user.profile.icons }},
-  "hsl({% widthratio forloop.counter0 1 color_step %}, 100%, 50%)"
-)
-pictures["{{ flight.id }}"] = []
+  // Async load the flights
+  fetch("{% url 'flights:detail' flight.pk %}")
+    .then(response => response.json())
+    .then(result => {
+        console.log(result)
+        let departure = [result.departure.lat, result.departure.lon]
+        let arrival = [result.arrival.lat, result.arrival.lon]
+        let waypoints = []
+        for(let i=0; i < result.waypoints.length; i++) {
+          waypoints.push([result.waypoints[i].lat, result.waypoints[i].lon])
+        }
+
+        polys["{{ flight.id }}"] = drawFlight(
+          departure,
+          arrival,
+          waypoints,
+          map,
+          {{ request.user.profile.icons }},
+          "hsl({% widthratio forloop.counter0 1 color_step %}, 100%, 50%)"
+        )
+
+        let flight = document.getElementById("flight-{{ flight.id }}")
+        flight.classList.remove("loading")
+        flight.classList.add("is-clickable")
+    })
+  pictures["{{ flight.id }}"] = []
 {% endfor %}
 
 // Event Listeners

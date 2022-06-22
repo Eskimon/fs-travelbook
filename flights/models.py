@@ -125,6 +125,19 @@ class Flight(models.Model):
             super(Flight, self).save(*args, **kwargs)
             return self
 
+    def full_dico(self):
+        out = {}
+        out["flight"]: str(self.id)
+        out["departure"] = {"lat": self.departure.lat, "lon": self.departure.lon}
+        if self.arrival:
+            out["arrival"] = {"lat": self.arrival.lat, "lon": self.arrival.lon}
+        elif self.intended:
+            out["arrival"] = {"lat": self.intended.lat, "lon": self.intended.lon}
+        else:
+            out["arrival"] = {"lat": 0, "lon": 0}
+        out["waypoints"] = [{"lat": wp.lat, "lon": wp.lon} for wp in self.waypoints.all()]
+        return out
+
 
 class Waypoint(models.Model):
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name="waypoints")

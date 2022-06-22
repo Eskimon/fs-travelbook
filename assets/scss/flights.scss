@@ -25,6 +25,20 @@ ul.flight-list {
   .color-box.hide {
     opacity: 0.25;
   }
+
+  li.loading {
+    filter: grayscale(60%);
+    animation: blink-animation 0.75s alternate infinite;
+  }
+}
+
+@keyframes blink-animation {
+  from {
+    opacity: 20%;
+  }
+  to {
+    opacity: 100%;
+  }
 }
 
 
