@@ -19,6 +19,10 @@
         </li>
       {% endfor %}
     </ul>
+    <div class="toggler is-flex">
+      <button id="hide-flights" class="button">Hide all flights</button>
+      <button id="show-flights" class="button">Show all flights</button>
+    </div>
   </div>
 </div>
 
@@ -81,32 +85,68 @@ document.querySelectorAll("ul.flight-list li .flight-name").forEach( el => {
   })
 })
 
+
+function showFlight(flightid, state) {
+  if(state) {
+    polys[flightid].polyline.addTo(map)
+    if(polys[flightid].dep_mark) {
+      polys[flightid].dep_mark.addTo(map)
+      polys[flightid].arr_mark.addTo(map)
+    }
+    if(pictures[flightid].length) {
+      pictures[flightid].forEach((item) => {
+        item.marker.addTo(map)
+      })
+    }
+  } else {
+    polys[flightid].polyline.removeFrom(map)
+    if(polys[flightid].dep_mark) {
+      polys[flightid].dep_mark.removeFrom(map)
+      polys[flightid].arr_mark.removeFrom(map)
+    }
+    if(pictures[flightid].length) {
+      pictures[flightid].forEach((item) => {
+        item.marker.removeFrom(map)
+      })
+    }
+  }
+}
+
 document.querySelectorAll("ul.flight-list li .color-box").forEach( el => {
   el.addEventListener("click", (event) => {
+    if(event.target.parentNode.classList.contains("loading"))
+      return
+    flightid = event.target.parentNode.dataset.flightid
     if(event.target.classList.contains("hide")) {
       event.target.classList.remove("hide")
-      polys[event.target.parentNode.dataset.flightid].polyline.addTo(map)
-      if(polys[event.target.parentNode.dataset.flightid].dep_mark) {
-        polys[event.target.parentNode.dataset.flightid].dep_mark.addTo(map)
-        polys[event.target.parentNode.dataset.flightid].arr_mark.addTo(map)
-      }
-      if(pictures[event.target.parentNode.dataset.flightid].length) {
-        pictures[event.target.parentNode.dataset.flightid].forEach((item) => {
-          item.marker.addTo(map)
-        })
-      }
+      showFlight(flightid, true)
     } else {
       event.target.classList.add("hide")
-      polys[event.target.parentNode.dataset.flightid].polyline.removeFrom(map)
-      if(polys[event.target.parentNode.dataset.flightid].dep_mark) {
-        polys[event.target.parentNode.dataset.flightid].dep_mark.removeFrom(map)
-        polys[event.target.parentNode.dataset.flightid].arr_mark.removeFrom(map)
-      }
-      if(pictures[event.target.parentNode.dataset.flightid].length) {
-        pictures[event.target.parentNode.dataset.flightid].forEach((item) => {
-          item.marker.removeFrom(map)
-        })
-      }
+      showFlight(flightid, false)
+    }
+  })
+})
+
+document.getElementById("hide-flights").addEventListener("click", (event) => {
+  document.querySelectorAll("ul.flight-list li .color-box").forEach( el => {
+    if(event.target.parentNode.classList.contains("loading"))
+      return
+    if(!el.classList.contains("hide" )) {
+      flightid = el.parentNode.dataset.flightid
+      el.classList.add("hide")
+      showFlight(flightid, false)
+    }
+  })
+})
+
+document.getElementById("show-flights").addEventListener("click", (event) => {
+  document.querySelectorAll("ul.flight-list li .color-box").forEach( el => {
+    if(event.target.parentNode.classList.contains("loading"))
+      return
+    if(el.classList.contains("hide" )) {
+      flightid = el.parentNode.dataset.flightid
+      el.classList.remove("hide")
+      showFlight(flightid, true)
     }
   })
 })
