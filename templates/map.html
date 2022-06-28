@@ -57,9 +57,12 @@ let polys = {}
 let pictures = {}
 pictures["None"] = []
 
+let myHeaders = new Headers();
+myHeaders.append("Accept", "application/json");
+
 {% for flight in flights.all %}
   // Async load the flights
-  fetch("{% url 'flights:detail' flight.pk %}")
+  fetch("{% url 'flights:detail' flight.pk %}", {headers: myHeaders})
     .then(response => response.json())
     .then(result => {
         polys["{{ flight.id }}"] = drawFlight(

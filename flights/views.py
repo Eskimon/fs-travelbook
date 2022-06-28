@@ -36,10 +36,9 @@ class DetailView(generic.DetailView):
         response = super(DetailView, self).get(request)
         if not (self.object.is_public or (request.user == self.object.owner)):
             raise Http404()
-        if request.is_ajax:
+        is_ajax = request.headers.get("Accept") == "application/json"
+        if is_ajax:
             response = JsonResponse(self.object.full_dico())
-        # else:
-        #     response = super(DetailView, self).get(request)
         return response
 
 
